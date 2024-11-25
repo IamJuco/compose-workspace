@@ -48,6 +48,7 @@ android {
 dependencies {
     implementation(project(":feature:main"))
     implementation(project(":feature:home"))
+    implementation(project(":feature:mypage"))
 
     implementation(project(":core:data"))
     implementation(project(":core:domain"))
