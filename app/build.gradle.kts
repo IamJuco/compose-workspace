@@ -1,16 +1,18 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    // Kotlin 2.0.0 버전부터, 루트와 모듈에 이 플러그인 추가시켜야함
+    alias(libs.plugins.compose.compiler)
 }
 
 android {
     namespace = "com.workspace.compose_workspace"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.workspace.compose_workspace"
         minSdk = 24
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 
