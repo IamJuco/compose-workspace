@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.jetbrains.kotlin.android)
+    // Serialization, 나중에 Toml에 옮길떄 Kotlin 버전이랑 맞춰야함
+    kotlin("plugin.serialization") version "2.0.0"
 }
 
 android {
@@ -33,6 +35,8 @@ android {
 }
 
 dependencies {
+    // Serialization
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3")
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

@@ -41,6 +41,12 @@ android {
 }
 
 dependencies {
+    implementation(project(":core:domain"))
+    implementation(project(":feature:home"))
+    implementation(project(":feature:mypage"))
+
+    // Navigation
+    implementation("androidx.navigation:navigation-compose:2.8.4")
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
