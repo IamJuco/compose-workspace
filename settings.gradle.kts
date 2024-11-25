@@ -22,3 +22,6 @@ dependencyResolutionManagement {
 rootProject.name = "ComposeWorkspace"
 include(":feature:main")
 include(":app")
+include(":feature:home")
+include(":core:domain")
+include(":core:data")

@@ -47,4 +47,11 @@ android {
 
 dependencies {
     implementation(project(":feature:main"))
+    implementation(project(":feature:home"))
+
+    implementation(project(":core:data"))
+    implementation(project(":core:domain"))
+
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.junit)
 }

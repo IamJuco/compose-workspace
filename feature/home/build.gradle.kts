@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.workspace.feature.main"
+    namespace = "com.workspace.feature.home"
     compileSdk = 35
 
     defaultConfig {
