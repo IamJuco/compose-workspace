@@ -19,6 +19,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "compose-workspace"
+rootProject.name = "ComposeWorkspace"
+include(":feature:main")
 include(":app")
- 
