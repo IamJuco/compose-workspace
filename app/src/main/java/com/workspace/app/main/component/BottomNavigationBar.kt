@@ -1,4 +1,4 @@
-package com.workspace.main.component
+package com.workspace.app.main.component
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home

@@ -1,4 +1,4 @@
-package com.workspace.main.ui.theme
+package com.workspace.app.main.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

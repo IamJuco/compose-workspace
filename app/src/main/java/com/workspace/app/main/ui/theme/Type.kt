@@ -1,4 +1,4 @@
-package com.workspace.main.ui.theme
+package com.workspace.app.main.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
