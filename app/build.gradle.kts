@@ -3,6 +3,9 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     // Kotlin 2.0.0 버전부터, 루트와 모듈에 이 플러그인 추가시켜야함
     alias(libs.plugins.compose.compiler)
+    // Hilt
+    id("com.google.dagger.hilt.android")
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -60,6 +63,11 @@ dependencies {
 
     // Navigation
     implementation("androidx.navigation:navigation-compose:2.8.4")
+
+    // Hilt
+    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
+    implementation("com.google.dagger:hilt-android:2.52")
+    ksp("com.google.dagger:hilt-android-compiler:2.52")
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

@@ -3,6 +3,9 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     // Serialization, 나중에 Toml에 옮길떄 Kotlin 버전이랑 맞춰야함
     kotlin("plugin.serialization") version "2.0.0"
+    // Hilt
+    id("com.google.dagger.hilt.android")
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -37,6 +40,11 @@ android {
 dependencies {
     // Serialization
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3")
+
+    // Hilt
+    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
+    implementation("com.google.dagger:hilt-android:2.52")
+    ksp("com.google.dagger:hilt-android-compiler:2.52")
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
