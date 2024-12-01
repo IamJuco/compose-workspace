@@ -2,11 +2,16 @@ package com.workspace.feature.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
+import com.workspace.core.domain.api_error_handle.ApiException
 import com.workspace.core.domain.model.PokemonList
+import com.workspace.core.domain.model.UiState
 import com.workspace.core.domain.usecase.GetPokemonListUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -14,35 +19,22 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val getPokemonListUseCase: GetPokemonListUseCase
 ) : ViewModel() {
-    private val _pokemonList = MutableStateFlow<List<PokemonList>>(emptyList())
-    val pokemonList: StateFlow<List<PokemonList>> = _pokemonList
 
-    private val _errorMessage = MutableStateFlow<String?>(null)
-    val errorMessage: StateFlow<String?> = _errorMessage
-
-    private val _isLoading = MutableStateFlow(false)
-    val isLoading: StateFlow<Boolean> = _isLoading
-
-    private var currentOffset = 0
-    private val pageSize = 20
+    private val _uiState = MutableStateFlow<UiState<Flow<PagingData<PokemonList>>>>(UiState.Loading)
+    val uiState: StateFlow<UiState<Flow<PagingData<PokemonList>>>> = _uiState.asStateFlow()
 
     init {
         fetchPokemonList()
     }
 
-    fun fetchPokemonList() {
-        if (_isLoading.value) return
-
-        _isLoading.value = true
+    private fun fetchPokemonList() {
         viewModelScope.launch {
-            try {
-                val newPokemons = getPokemonListUseCase(currentOffset, pageSize)
-                _pokemonList.value += newPokemons
-                currentOffset += pageSize
-            } catch (e: Exception) {
-                _errorMessage.value = e.localizedMessage ?: "error"
-            } finally {
-                _isLoading.value = false
+            val result = getPokemonListUseCase()
+            result.onSuccess { pagingFlow ->
+                _uiState.value = UiState.Success(pagingFlow)
+            }.onFailure { throwable ->
+                val apiException = throwable as? ApiException ?: ApiException.Unknown
+                _uiState.value = UiState.Failure(apiException)
             }
         }
     }

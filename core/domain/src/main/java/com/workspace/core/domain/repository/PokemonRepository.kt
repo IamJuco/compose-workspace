@@ -1,9 +1,9 @@
 package com.workspace.core.domain.repository
 
-import com.workspace.core.domain.model.Pokemon
 import com.workspace.core.domain.model.PokemonList
+import kotlinx.coroutines.flow.Flow
+import androidx.paging.PagingData
 
 interface PokemonRepository {
-    suspend fun getPokemon(id: Int): Pokemon
-    suspend fun getPokemonList(offset: Int, limit: Int): List<PokemonList>
+    fun getPokemonPagingData(): Flow<PagingData<PokemonList>>
 }
