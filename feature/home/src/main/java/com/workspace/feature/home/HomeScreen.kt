@@ -9,55 +9,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.workspace.feature.home.component.PokemonCard
 
 @Composable
 fun HomeScreen(
     navController: NavHostController,
+    homeViewModel: HomeViewModel = hiltViewModel()
 ) {
-    val scrollState = rememberScrollState()
-    Column(
-        modifier = Modifier.verticalScroll(scrollState).padding(10.dp)
-    ) {
-        Text(
-            text = "Home",
-            fontSize = 50.sp
-        )
-        Text(
-            text = "Home",
-            fontSize = 20.sp
-        )
-        Text(
-            text = "Home",
-            fontSize = 20.sp
-        )
-        Text(
-            text = "Home",
-            fontSize = 20.sp
-        )
-        Text(
-            text = "Home",
-            fontSize = 20.sp
-        )
-        Text(
-            text = "Home",
-            fontSize = 20.sp
-        )
-        Text(
-            text = "Home",
-            fontSize = 20.sp
-        )
-        Text(
-            text = "Home",
-            fontSize = 20.sp
-        )
-        Text(
-            text = "Home",
-            fontSize = 20.sp
-        )
-        Text(
-            text = "Home",
-            fontSize = 20.sp
-        )
+//    val scrollState = rememberScrollState()
+    Column {
+        PokemonCard(viewModel = homeViewModel)
     }
 }
