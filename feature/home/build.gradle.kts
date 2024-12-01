@@ -58,6 +58,10 @@ dependencies {
     implementation("io.coil-kt.coil3:coil-compose:3.0.4")
     implementation("io.coil-kt.coil3:coil-network-okhttp:3.0.4")
 
+    // Paging3
+    implementation("androidx.paging:paging-runtime-ktx:3.3.4")
+    implementation("androidx.paging:paging-compose:3.3.4")
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)

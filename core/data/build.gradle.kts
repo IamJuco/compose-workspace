@@ -55,6 +55,9 @@ dependencies {
     // Gson
     implementation("com.google.code.gson:gson:2.11.0")
 
+    // Paging3
+    implementation("androidx.paging:paging-runtime-ktx:3.3.4")
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
