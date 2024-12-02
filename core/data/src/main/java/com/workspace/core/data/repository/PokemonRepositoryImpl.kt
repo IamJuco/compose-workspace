@@ -9,7 +9,6 @@ import com.workspace.core.data.datasource.PokemonDataSource
 import com.workspace.core.data.datasource.PokemonPagingSource
 import com.workspace.core.data.dto.PokemonResult
 import com.workspace.core.data.mapper.toDomainModel
-import com.workspace.core.domain.model.Pokemon
 import com.workspace.core.domain.model.PokemonList
 import com.workspace.core.domain.repository.PokemonRepository
 import kotlinx.coroutines.flow.Flow

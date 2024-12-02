@@ -1,19 +1,19 @@
 package com.workspace.feature.home
 
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -21,11 +21,16 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.paging.PagingData
 import androidx.paging.compose.collectAsLazyPagingItems
-import coil3.compose.AsyncImage
 import com.workspace.core.domain.api_error_handle.ApiException
 import com.workspace.core.domain.model.PokemonList
 import com.workspace.core.domain.model.UiState
+import com.workspace.feature.home.component.PokemonCard
 import kotlinx.coroutines.flow.Flow
+
+@Composable
+fun HomeRoute() {
+
+}
 
 @Composable
 fun HomeScreen(
@@ -36,18 +41,29 @@ fun HomeScreen(
 
     when (uiState) {
         is UiState.Loading -> {
-            CircularProgressIndicator()
+            Box(
+                modifier = Modifier
+                    .fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator(modifier = Modifier.size(64.dp))
+            }
         }
 
         is UiState.Success -> {
             val pagingDataFlow = (uiState as UiState.Success<Flow<PagingData<PokemonList>>>).data
             val lazyPagingItems = pagingDataFlow.collectAsLazyPagingItems()
 
-            LazyColumn {
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(2),
+                modifier = Modifier.fillMaxSize(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
                 items(lazyPagingItems.itemCount) { index ->
                     val pokemon = lazyPagingItems[index]
                     pokemon?.let {
-                        PokemonItem(it)
+                        PokemonCard(it)
                     }
                 }
             }
@@ -57,23 +73,6 @@ fun HomeScreen(
             val exception = (uiState as UiState.Failure).exception
             ErrorDialog(exception)
         }
-    }
-}
-
-@Composable
-fun PokemonItem(pokemon: PokemonList) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp)
-    ) {
-        AsyncImage(
-            model = pokemon.imageUrl,
-            contentDescription = "Pokemon Image",
-            modifier = Modifier.size(64.dp)
-        )
-        Spacer(modifier = Modifier.width(8.dp))
-        Text(text = pokemon.name, style = MaterialTheme.typography.bodyMedium)
     }
 }
 
