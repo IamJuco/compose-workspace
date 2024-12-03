@@ -15,11 +15,10 @@ fun MainNavGraph(
 ) {
     NavHost(
         navController = navController,
-        startDestination = RouteModel.Home.ROUTE, // 첫 화면 설정
+        startDestination = RouteModel.Home.ROUTE,
         modifier = modifier
     ) {
-        // Feature 모듈의 확장 함수 호출
-        homeRoute(navController)
-        myPageRoute(navController)
+        homeRoute()
+        myPageRoute()
     }
 }

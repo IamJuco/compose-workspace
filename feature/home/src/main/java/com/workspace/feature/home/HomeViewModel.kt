@@ -8,6 +8,7 @@ import com.workspace.core.domain.model.PokemonList
 import com.workspace.core.domain.model.UiState
 import com.workspace.core.domain.usecase.GetPokemonListUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -31,10 +32,10 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             val result = getPokemonListUseCase()
             result.onSuccess { pagingFlow ->
-                _uiState.value = UiState.Success(pagingFlow)
+                _uiState.emit(UiState.Success(pagingFlow))
             }.onFailure { throwable ->
                 val apiException = throwable as? ApiException ?: ApiException.Unknown
-                _uiState.value = UiState.Failure(apiException)
+                _uiState.emit(UiState.Failure(apiException))
             }
         }
     }

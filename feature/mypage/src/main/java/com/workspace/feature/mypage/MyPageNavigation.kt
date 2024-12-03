@@ -5,8 +5,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import com.workspace.core.domain.navigation.RouteModel
 
-fun NavGraphBuilder.myPageRoute(navController: NavHostController) {
+fun NavGraphBuilder.myPageRoute() {
     composable(RouteModel.MyPage.ROUTE) {
-        MyPageScreen(navController)
+        MyPageScreen()
     }
 }
