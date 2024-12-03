@@ -24,11 +24,7 @@ class HomeViewModel @Inject constructor(
     private val _uiState = MutableStateFlow<UiState<Flow<PagingData<PokemonList>>>>(UiState.Loading)
     val uiState: StateFlow<UiState<Flow<PagingData<PokemonList>>>> = _uiState.asStateFlow()
 
-    init {
-        fetchPokemonList()
-    }
-
-    private fun fetchPokemonList() {
+    fun fetchPokemonList() {
         viewModelScope.launch {
             val result = getPokemonListUseCase()
             result.onSuccess { pagingFlow ->

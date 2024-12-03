@@ -12,6 +12,10 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -40,9 +44,28 @@ fun HomeRoute(
     homeViewModel: HomeViewModel = hiltViewModel()
 ) {
     val uiState by homeViewModel.uiState.collectAsStateWithLifecycle()
+    var errorScreen by remember { mutableStateOf(false) }
 
-    when (uiState) {
-        is UiState.Loading -> {
+    LaunchedEffect(Unit) {
+        homeViewModel.fetchPokemonList()
+    }
+
+    LaunchedEffect(uiState) {
+        if (uiState is UiState.Loading) {
+            delay(5000)
+            errorScreen = true
+        } else {
+            errorScreen = false
+        }
+    }
+
+    when {
+        errorScreen -> {
+            val exception = ApiException.Unknown
+            ErrorScreen(exception)
+        }
+
+        uiState is UiState.Loading -> {
             Log.d("HomeScreen", "Loading 상태")
             Box(
                 modifier = Modifier
@@ -53,16 +76,18 @@ fun HomeRoute(
             }
         }
 
-        is UiState.Success -> {
+        uiState is UiState.Success -> {
             Log.d("HomeScreen", "Success 상태")
             val pagingDataFlow = (uiState as UiState.Success<Flow<PagingData<PokemonList>>>).data
             val lazyPagingItems = pagingDataFlow.collectAsLazyPagingItems()
+            Log.d("HomeScreen", "LazyPagingItems count: ${lazyPagingItems.itemCount}")
+            Log.d("HomeScreen", "LoadState: ${lazyPagingItems.loadState}")
             HomeScreen(
                 pokemonItems = lazyPagingItems
             )
         }
 
-        is UiState.Failure -> {
+        uiState is UiState.Failure -> {
             Log.d("HomeScreen", "Failure 상태")
             val exception = (uiState as UiState.Failure).exception
             ErrorScreen(exception)
@@ -91,6 +116,8 @@ fun HomeScreen(
 
 @Composable
 fun ErrorScreen(exception: ApiException) {
+    val snackbarHostState = remember { SnackbarHostState() }
+
     val errorMessage = when (exception) {
         is ApiException.BadRequest -> "잘못된 요청입니다."
         is ApiException.Unauthorized -> "인증되지 않았습니다."
@@ -100,5 +127,22 @@ fun ErrorScreen(exception: ApiException) {
         is ApiException.ServerError -> "서버 오류가 발생했습니다."
         is ApiException.InternetError -> "인터넷 연결이 불안정합니다."
         is ApiException.Unknown -> "알 수 없는 오류가 발생했습니다."
+    }
+
+    Scaffold(
+        snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
+    ) { paddingValues ->
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(text = errorMessage, style = MaterialTheme.typography.bodyLarge)
+        }
+
+        LaunchedEffect(errorMessage) {
+            snackbarHostState.showSnackbar(errorMessage)
+        }
     }
 }

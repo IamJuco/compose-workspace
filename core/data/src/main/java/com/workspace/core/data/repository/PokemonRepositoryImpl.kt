@@ -16,7 +16,7 @@ import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class PokemonRepositoryImpl @Inject constructor(
-    private val remoteDataSource: PokemonDataSource
+    private val pokemonDataSource: PokemonDataSource
 ) : PokemonRepository {
     override fun getPokemonPagingData(): Flow<PagingData<PokemonList>> {
         return Pager(
@@ -24,7 +24,7 @@ class PokemonRepositoryImpl @Inject constructor(
                 pageSize = 20,
                 enablePlaceholders = false
             ),
-            pagingSourceFactory = { PokemonPagingSource(remoteDataSource) }
+            pagingSourceFactory = { PokemonPagingSource(pokemonDataSource) }
         ).flow.map { pagingData ->
             pagingData.map { it.toDomainModel() }
         }
