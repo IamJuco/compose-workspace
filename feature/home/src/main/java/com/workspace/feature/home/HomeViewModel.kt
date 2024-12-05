@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -28,10 +29,10 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             val result = getPokemonListUseCase()
             result.onSuccess { pagingFlow ->
-                _uiState.emit(UiState.Success(pagingFlow))
+                _uiState.update { (UiState.Success(pagingFlow)) }
             }.onFailure { throwable ->
                 val apiException = throwable as? ApiException ?: ApiException.Unknown
-                _uiState.emit(UiState.Failure(apiException))
+                _uiState.update { (UiState.Failure(apiException)) }
             }
         }
     }
