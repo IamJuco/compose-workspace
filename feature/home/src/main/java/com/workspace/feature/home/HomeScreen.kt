@@ -1,148 +1,110 @@
 package com.workspace.feature.home
 
-import android.util.Log
-import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.material3.AlertDialog
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavHostController
-import androidx.paging.PagingData
+import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
-import com.workspace.core.domain.api_error_handle.ApiException
+import com.workspace.core.domain.model.ErrorCode
 import com.workspace.core.domain.model.PokemonList
-import com.workspace.core.domain.model.UiState
 import com.workspace.feature.home.component.PokemonCard
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.Flow
 
 @Composable
 fun HomeRoute(
     homeViewModel: HomeViewModel = hiltViewModel()
 ) {
-    val uiState by homeViewModel.uiState.collectAsStateWithLifecycle()
-    var errorScreen by remember { mutableStateOf(false) }
-
-    LaunchedEffect(Unit) {
-        homeViewModel.fetchPokemonList()
-    }
-
-    LaunchedEffect(uiState) {
-        if (uiState is UiState.Loading) {
-            delay(5000)
-            errorScreen = true
-        } else {
-            errorScreen = false
-        }
-    }
+    val pokemonList = homeViewModel.pokemonPagingData.collectAsLazyPagingItems()
 
     when {
-        errorScreen -> {
-            val exception = ApiException.Unknown
-            ErrorScreen(exception)
+        pokemonList.loadState.refresh is LoadState.Loading -> {
+            LoadingScreen()
         }
-
-        uiState is UiState.Loading -> {
-            Log.d("HomeScreen", "Loading 상태")
-            Box(
-                modifier = Modifier
-                    .fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                CircularProgressIndicator(modifier = Modifier.size(64.dp))
+        pokemonList.loadState.refresh is LoadState.Error -> {
+            val error = (pokemonList.loadState.refresh as LoadState.Error).error
+            ErrorScreen(errorMessage = error.message ?: "An unknown error occurred") {
+                pokemonList.retry()
             }
         }
-
-        uiState is UiState.Success -> {
-            Log.d("HomeScreen", "Success 상태")
-            val pagingDataFlow = (uiState as UiState.Success<Flow<PagingData<PokemonList>>>).data
-            val lazyPagingItems = pagingDataFlow.collectAsLazyPagingItems()
-            Log.d("HomeScreen", "LazyPagingItems count: ${lazyPagingItems.itemCount}")
-            Log.d("HomeScreen", "LoadState: ${lazyPagingItems.loadState}")
-            HomeScreen(
-                pokemonItems = lazyPagingItems
-            )
-        }
-
-        uiState is UiState.Failure -> {
-            Log.d("HomeScreen", "Failure 상태")
-            val exception = (uiState as UiState.Failure).exception
-            ErrorScreen(exception)
+        else -> {
+            HomeScreen(pokemonList = pokemonList)
         }
     }
 }
 
 @Composable
 fun HomeScreen(
-    pokemonItems: LazyPagingItems<PokemonList>
+    pokemonList: LazyPagingItems<PokemonList>
 ) {
-    LazyVerticalGrid(
-        columns = GridCells.Fixed(2),
-        modifier = Modifier.fillMaxSize(),
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
-        items(pokemonItems.itemCount) { index ->
-            val pokemon = pokemonItems[index]
-            pokemon?.let {
-                PokemonCard(it)
+    LazyColumn {
+        items(pokemonList.itemCount) { index ->
+            val pokemon = pokemonList[index]
+            if (pokemon != null) {
+                PokemonCard(pokemon)
+            }
+        }
+
+        pokemonList.apply {
+            when {
+                loadState.append is LoadState.Loading -> {
+                    item { LoadingScreen() }
+                }
+                loadState.append is LoadState.Error -> {
+                    val error = (loadState.append as LoadState.Error).error
+                    item {
+                        ErrorScreen(errorMessage = error.message ?: ErrorCode.UNKNOWN_ERROR.message) {
+                            retry()
+                        }
+                    }
+                }
             }
         }
     }
 }
 
 @Composable
-fun ErrorScreen(exception: ApiException) {
-    val snackbarHostState = remember { SnackbarHostState() }
-
-    val errorMessage = when (exception) {
-        is ApiException.BadRequest -> "잘못된 요청입니다."
-        is ApiException.Unauthorized -> "인증되지 않았습니다."
-        is ApiException.Forbidden -> "접근이 금지되었습니다."
-        is ApiException.NotFound -> "리소스를 찾을 수 없습니다."
-        is ApiException.TimeOut -> "요청 시간이 초과되었습니다."
-        is ApiException.ServerError -> "서버 오류가 발생했습니다."
-        is ApiException.InternetError -> "인터넷 연결이 불안정합니다."
-        is ApiException.Unknown -> "알 수 없는 오류가 발생했습니다."
+fun LoadingScreen() {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        CircularProgressIndicator()
     }
+}
 
-    Scaffold(
-        snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
-    ) { paddingValues ->
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues),
-            contentAlignment = Alignment.Center
-        ) {
-            Text(text = errorMessage, style = MaterialTheme.typography.bodyLarge)
-        }
-
-        LaunchedEffect(errorMessage) {
-            snackbarHostState.showSnackbar(errorMessage)
+@Composable
+fun ErrorScreen(
+    errorMessage: String,
+    onRetry: () -> Unit
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Text(text = errorMessage, color = Color.Red, style = MaterialTheme.typography.bodyMedium)
+        Spacer(modifier = Modifier.height(16.dp))
+        Button(onClick = onRetry) {
+            Text(text = "Retry")
         }
     }
 }

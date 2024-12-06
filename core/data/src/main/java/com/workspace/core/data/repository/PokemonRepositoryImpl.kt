@@ -4,10 +4,8 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.map
-import com.workspace.core.data.api.PokeService
 import com.workspace.core.data.datasource.PokemonDataSource
 import com.workspace.core.data.datasource.PokemonPagingSource
-import com.workspace.core.data.dto.PokemonResult
 import com.workspace.core.data.mapper.toDomainModel
 import com.workspace.core.domain.model.PokemonList
 import com.workspace.core.domain.repository.PokemonRepository
