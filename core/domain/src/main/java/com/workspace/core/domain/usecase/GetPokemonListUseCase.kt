@@ -9,9 +9,7 @@ import javax.inject.Inject
 class GetPokemonListUseCase @Inject constructor(
     private val repository: PokemonRepository
 ) {
-    operator fun invoke(): Result<Flow<PagingData<PokemonList>>> {
-        return runCatching {
-            repository.getPokemonPagingData()
-        }
+    operator fun invoke(): Flow<PagingData<PokemonList>> {
+        return repository.getPokemonPagingData()
     }
 }
