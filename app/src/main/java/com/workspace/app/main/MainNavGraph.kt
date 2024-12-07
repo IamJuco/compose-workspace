@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
+import com.example.feature.detail.navigation.detailRoute
 import com.workspace.core.domain.navigation.RouteModel
 import com.workspace.feature.home.navigation.homeRoute
 import com.workspace.feature.mypage.myPageRoute
@@ -18,7 +19,8 @@ fun MainNavGraph(
         startDestination = RouteModel.Home.ROUTE,
         modifier = modifier
     ) {
-        homeRoute()
+        homeRoute(navController)
         myPageRoute()
+        detailRoute()
     }
 }
