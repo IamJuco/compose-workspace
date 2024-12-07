@@ -11,7 +11,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
 import com.workspace.core.domain.model.PokemonList
 
@@ -27,13 +30,16 @@ fun PokemonCard(pokemon: PokemonList) {
             contentDescription = "포켓몬 이미지",
             modifier = Modifier
                 .fillMaxWidth()
-                .aspectRatio(1f)
+                .aspectRatio(1f),
+            contentScale = ContentScale.Fit
         )
         Spacer(modifier = Modifier.height(8.dp))
         Text(
             text = pokemon.name,
             style = MaterialTheme.typography.bodyMedium,
-            modifier = Modifier.align(Alignment.CenterHorizontally)
+            fontWeight = FontWeight.Bold,
+            fontSize = 16.sp,
+            modifier = Modifier.align(Alignment.CenterHorizontally).padding(8.dp)
         )
     }
 }

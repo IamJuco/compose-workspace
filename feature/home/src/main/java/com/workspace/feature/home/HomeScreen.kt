@@ -1,5 +1,6 @@
 package com.workspace.feature.home
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -58,6 +59,7 @@ fun HomeScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
+            .background(Color.Black),
     ) {
         LazyVerticalGrid(
             columns = GridCells.Fixed(GRID_COLUMN),
