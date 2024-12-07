@@ -6,6 +6,6 @@ plugins {
     // Kotlin 2.0.0 버전부터, 루트와 모듈에 이 플러그인 추가시켜야함
     alias(libs.plugins.compose.compiler) apply false
     //Hilt
-    id("com.google.dagger.hilt.android") version "2.52" apply false
+    id("com.google.dagger.hilt.android") version "2.53" apply false
     id("com.google.devtools.ksp") version "2.0.20-1.0.25" apply false
 }
