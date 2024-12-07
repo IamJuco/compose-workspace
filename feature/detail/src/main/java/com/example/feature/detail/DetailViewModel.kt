@@ -8,6 +8,7 @@ import com.workspace.core.domain.usecase.GetPokemonDetailUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -21,7 +22,7 @@ class DetailViewModel @Inject constructor(
 
     fun loadPokemonDetail(pokemonId: Int) {
         viewModelScope.launch {
-            _pokemonDetail.value = getPokemonDetailUseCase(pokemonId)
+            _pokemonDetail.update { getPokemonDetailUseCase(pokemonId) }
         }
     }
 }
