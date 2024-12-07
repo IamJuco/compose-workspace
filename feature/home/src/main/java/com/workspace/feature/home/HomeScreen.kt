@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
@@ -30,6 +31,7 @@ const val GRID_COLUMN = 2
 
 @Composable
 fun HomeRoute(
+    navController: NavHostController,
     homeViewModel: HomeViewModel = hiltViewModel()
 ) {
     val pokemonList = homeViewModel.pokemonPagingData.collectAsLazyPagingItems()
@@ -47,14 +49,17 @@ fun HomeRoute(
         }
 
         else -> {
-            HomeScreen(pokemonList = pokemonList)
+            HomeScreen(pokemonList = pokemonList, onPokemonClick = { pokemonId ->
+                navController.navigate("detail/$pokemonId")
+            })
         }
     }
 }
 
 @Composable
 fun HomeScreen(
-    pokemonList: LazyPagingItems<PokemonList>
+    pokemonList: LazyPagingItems<PokemonList>,
+    onPokemonClick: (Int) -> Unit
 ) {
     Box(
         modifier = Modifier
@@ -67,7 +72,10 @@ fun HomeScreen(
             items(pokemonList.itemCount) { index ->
                 val pokemon = pokemonList[index]
                 if (pokemon != null) {
-                    PokemonCard(pokemon)
+                    PokemonCard(
+                        pokemon = pokemon,
+                        onClick = { onPokemonClick(pokemon.id) }
+                    )
                 }
             }
         }

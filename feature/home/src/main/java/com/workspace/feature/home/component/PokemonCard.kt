@@ -1,5 +1,6 @@
 package com.workspace.feature.home.component
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -19,11 +20,15 @@ import coil3.compose.AsyncImage
 import com.workspace.core.domain.model.PokemonList
 
 @Composable
-fun PokemonCard(pokemon: PokemonList) {
+fun PokemonCard(
+    pokemon: PokemonList,
+    onClick: () -> Unit
+) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp)
+            .clickable { onClick() }
     ) {
         AsyncImage(
             model = pokemon.imageUrl,
@@ -39,7 +44,9 @@ fun PokemonCard(pokemon: PokemonList) {
             style = MaterialTheme.typography.bodyMedium,
             fontWeight = FontWeight.Bold,
             fontSize = 16.sp,
-            modifier = Modifier.align(Alignment.CenterHorizontally).padding(8.dp)
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+                .padding(8.dp)
         )
     }
 }
