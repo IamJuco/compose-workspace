@@ -11,5 +11,5 @@ data class PokemonResponse(
 )
 
 data class Sprites(
-    @SerializedName("front_default") val frontDefault: String?, // 포켓몬 기본 이미지 (정면)
+    @SerializedName("front_default") val frontDefault: String, // 포켓몬 기본 이미지 (정면)
 )
