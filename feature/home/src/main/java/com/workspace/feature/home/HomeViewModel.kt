@@ -25,25 +25,10 @@ class HomeViewModel @Inject constructor(
     private val _searchQuery = MutableStateFlow("")
     val searchQuery: StateFlow<String> = _searchQuery.asStateFlow()
 
-    private val _appliedQuery = MutableStateFlow("")
-    val appliedQuery: StateFlow<String> = _appliedQuery.asStateFlow()
-
     val pokemonPagingData: Flow<PagingData<PokemonList>> =
-        appliedQuery.flatMapLatest { query ->
-            getPokemonListUseCase().map { pagingData ->
-                if (query.isEmpty()) {
-                    pagingData
-                } else {
-                    pagingData.filter { it.name.contains(query, ignoreCase = true) }
-                }
-            }
-        }.cachedIn(viewModelScope)
+        getPokemonListUseCase().cachedIn(viewModelScope)
 
     fun updateSearchQuery(query: String) {
         _searchQuery.update { query }
-    }
-
-    fun applySearchQuery() {
-        _appliedQuery.update { _searchQuery.value }
     }
 }
