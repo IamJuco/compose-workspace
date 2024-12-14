@@ -1,45 +1,28 @@
 package com.workspace.app.main.component
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.navigation.NavHostController
-import com.workspace.core.domain.navigation.RouteModel
+import androidx.compose.ui.res.painterResource
+import com.workspace.app.main.navigation.MainMenu
 
 @Composable
-fun BottomNavigationBar(navController: NavHostController) {
-    val currentRoute = navController.currentBackStackEntry?.destination?.route
-
+fun BottomNavigationBar(
+    currentMenu: MainMenu?,
+    onMenuSelected: (MainMenu) -> Unit
+) {
     NavigationBar {
-        NavigationBarItem(
-            icon = { Icon(Icons.Default.Home, contentDescription = "Home") },
-            label = { Text("Home") },
-            selected = currentRoute == RouteModel.Home.ROUTE,
-            onClick = {
-                navController.navigate(RouteModel.Home.ROUTE) {
-                    popUpTo(navController.graph.startDestinationId) { saveState = true }
-                    launchSingleTop = true
-                    restoreState = true
-                }
-            }
-        )
-
-        NavigationBarItem(
-            icon = { Icon(Icons.Default.Person, contentDescription = "MyPage") },
-            label = { Text("MyPage") },
-            selected = currentRoute == RouteModel.MyPage.ROUTE,
-            onClick = {
-                navController.navigate(RouteModel.MyPage.ROUTE) {
-                    popUpTo(navController.graph.startDestinationId) { saveState = true }
-                    launchSingleTop = true
-                    restoreState = true
-                }
-            }
-        )
+        MainMenu.entries.forEach { menu ->
+            NavigationBarItem(
+                icon = {
+                    Icon(painterResource(menu.iconResId), contentDescription = menu.contentDescription)
+                },
+                label = { Text(menu.contentDescription) },
+                selected = menu == currentMenu,
+                onClick = { onMenuSelected(menu) }
+            )
+        }
     }
 }
