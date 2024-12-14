@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.jetbrains.kotlin.android)
+    alias(libs.plugins.kotlin.serialization)
     // Serialization, 나중에 Toml에 옮길떄 Kotlin 버전이랑 맞춰야함
     alias(libs.plugins.compose.compiler)
     // Hilt
