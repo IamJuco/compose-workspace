@@ -10,6 +10,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import com.example.feature.detail.navigation.navigateToDetail
+import com.example.feature.login.navigation.navigateLogin
 import com.workspace.core.domain.navigation.RouteModel
 import com.workspace.feature.home.navigation.navigateHome
 import com.workspace.feature.mypage.navigateMyPage
@@ -17,7 +18,7 @@ import com.workspace.feature.mypage.navigateMyPage
 class MainNavigator(
     val navController: NavHostController
 ) {
-    val startDestination = MainMenu.HOME.route
+    val startDestination = RouteModel.Login
     val currentDestination: NavDestination?
         @Composable get() = navController.currentBackStackEntryAsState().value?.destination
     val currentMenu: MainMenu?
@@ -44,8 +45,8 @@ class MainNavigator(
     }
 
     fun navigateToDetail(pokemonId: Int) = navController.navigateToDetail(pokemonId = pokemonId, navOptions  = singleTopOptions)
-//    fun navigateToSignIn() = navController.navigateToSignIn(navOptions  = singleTopOptions)
-//    fun navigateToSignUp() = navController.navigateToSignUp(navOptions  = singleTopOptions)
+    fun navigateLogin() = navController.navigateLogin(navOptions  = singleTopOptions)
+//    fun navigateToRegister() = navController.navigateToRegister(navOptions  = singleTopOptions)
 
     fun popBackStack() {
         navController.popBackStack()

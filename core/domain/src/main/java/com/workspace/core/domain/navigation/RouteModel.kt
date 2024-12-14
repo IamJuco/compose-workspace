@@ -4,10 +4,10 @@ import kotlinx.serialization.Serializable
 
 sealed interface RouteModel {
     @Serializable
-    data object SignIn : RouteModel
+    data object Login : RouteModel
 
     @Serializable
-    data object SignUp : RouteModel
+    data object Register : RouteModel
 
     @Serializable
     data class Detail(val pokemonId: Int) : MainMenuRoute
