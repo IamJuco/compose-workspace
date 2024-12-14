@@ -21,6 +21,6 @@ fun MainNavGraph(
     ) {
         homeRoute(navController)
         myPageRoute()
-        detailRoute()
+        detailRoute(navController)
     }
 }
