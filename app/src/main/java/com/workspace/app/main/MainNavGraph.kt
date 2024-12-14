@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
+import com.example.feature.auth.sign_in.navigation.signInRoute
 import com.example.feature.detail.navigation.detailRoute
 import com.workspace.core.domain.navigation.RouteModel
 import com.workspace.feature.home.navigation.homeRoute
@@ -22,5 +23,6 @@ fun MainNavGraph(
         homeRoute(navController)
         myPageRoute()
         detailRoute(navController)
+        signInRoute()
     }
 }

@@ -10,7 +10,7 @@ sealed interface RouteModel {
 
     @Serializable
     data object MyPage : RouteModel {
-        const val ROUTE = "mypage"
+        const val ROUTE = "my_page"
     }
 
     @Serializable
@@ -23,4 +23,16 @@ sealed interface RouteModel {
         val routeWithArgs: String
             get() = "$ROUTE/{$ARG_POKEMON_ID}"
     }
+
+    @Serializable
+    data object SignIn : RouteModel {
+        const val ROUTE = "sign_in"
+    }
+
+
+    @Serializable
+    data object SignUp : RouteModel {
+        const val ROUTE = "sign_up"
+    }
+
 }
