@@ -4,35 +4,19 @@ import kotlinx.serialization.Serializable
 
 sealed interface RouteModel {
     @Serializable
-    data object Home : RouteModel {
-        const val ROUTE = "home"
-    }
+    data object SignIn : RouteModel
 
     @Serializable
-    data object MyPage : RouteModel {
-        const val ROUTE = "my_page"
-    }
+    data object SignUp : RouteModel
 
     @Serializable
-    data class Detail(val pokemonId: Int) : RouteModel {
-        companion object {
-            const val ROUTE = "detail"
-            const val ARG_POKEMON_ID = "pokemonId"
-        }
+    data class Detail(val pokemonId: Int) : MainMenuRoute
+}
 
-        val routeWithArgs: String
-            get() = "$ROUTE/{$ARG_POKEMON_ID}"
-    }
+sealed interface MainMenuRoute : RouteModel {
+    @Serializable
+    data object Home : MainMenuRoute
 
     @Serializable
-    data object SignIn : RouteModel {
-        const val ROUTE = "sign_in"
-    }
-
-
-    @Serializable
-    data object SignUp : RouteModel {
-        const val ROUTE = "sign_up"
-    }
-
+    data object MyPage : MainMenuRoute
 }
