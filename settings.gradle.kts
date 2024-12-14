@@ -25,7 +25,8 @@ include(":app")
 include(":feature:home")
 include(":feature:mypage")
 include(":feature:detail")
+include(":feature:login")
+include(":feature:register")
 
 include(":core:domain")
 include(":core:data")
-
