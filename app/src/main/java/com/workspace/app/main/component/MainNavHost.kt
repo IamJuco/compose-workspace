@@ -9,7 +9,7 @@ import com.workspace.feature.home.navigation.homeNavGraph
 import com.workspace.feature.mypage.myPageNavGraph
 
 @Composable
-fun MainNavGraph(
+fun MainNavHost(
     navigator: MainNavigator,
     padding: PaddingValues,
 ) {

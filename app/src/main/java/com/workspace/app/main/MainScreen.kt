@@ -3,7 +3,7 @@ package com.workspace.app.main
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import com.workspace.app.main.component.BottomNavigationBar
-import com.workspace.app.main.component.MainNavGraph
+import com.workspace.app.main.component.MainNavHost
 import com.workspace.app.main.navigation.MainNavigator
 import com.workspace.app.main.navigation.rememberMainNavigator
 
@@ -13,7 +13,7 @@ fun MainScreen(
 ) {
     Scaffold(
         content = { paddingValues ->
-            MainNavGraph(
+            MainNavHost(
                 navigator = navigator,
                 padding = paddingValues
             )
