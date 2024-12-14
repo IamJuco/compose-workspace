@@ -6,6 +6,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -30,7 +31,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavHostController
 import com.example.feature.detail.component.PokemonImageCard
 import com.example.feature.detail.component.PokemonStatusCard
 import com.workspace.core.domain.model.Pokemon
@@ -40,7 +40,8 @@ import com.workspace.core.domain.model.ServiceResult
 fun DetailRoute(
     pokemonId: Int,
     detailViewModel: DetailViewModel = hiltViewModel(),
-    navController: NavHostController
+    popBackStack: () -> Unit,
+    padding: PaddingValues = PaddingValues()
 ) {
     val pokemonDetail = detailViewModel.pokemonDetail.collectAsStateWithLifecycle()
 
@@ -52,7 +53,8 @@ fun DetailRoute(
         is ServiceResult.Loading -> LoadingScreen()
         is ServiceResult.Success -> DetailScreen(
             pokemon = result.data,
-            onBackClick = { navController.popBackStack() }
+            onBackClick = { popBackStack() },
+            padding = padding
         )
 
         is ServiceResult.Error -> {
@@ -65,9 +67,14 @@ fun DetailRoute(
 }
 
 @Composable
-fun DetailScreen(pokemon: Pokemon, onBackClick: () -> Unit) {
+fun DetailScreen(
+    pokemon: Pokemon,
+    onBackClick: () -> Unit,
+    padding: PaddingValues
+) {
     Box(
         modifier = Modifier
+            .padding(padding)
             .fillMaxSize()
             .background(Color.DarkGray)
     ) {

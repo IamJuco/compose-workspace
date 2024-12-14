@@ -1,13 +1,12 @@
 package com.workspace.feature.home
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -15,20 +14,15 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavHostController
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
@@ -41,8 +35,9 @@ const val GRID_COLUMN = 2
 
 @Composable
 fun HomeRoute(
-    navController: NavHostController,
-    homeViewModel: HomeViewModel = hiltViewModel()
+    navigateToDetail: (Int) -> Unit = {},
+    homeViewModel: HomeViewModel = hiltViewModel(),
+    padding: PaddingValues = PaddingValues()
 ) {
     val pokemonList = homeViewModel.pokemonPagingData.collectAsLazyPagingItems()
     val searchQuery by homeViewModel.searchQuery.collectAsStateWithLifecycle()
@@ -61,12 +56,13 @@ fun HomeRoute(
 
         else -> {
             HomeScreen(
+                padding = padding,
                 pokemonList = pokemonList,
                 searchQuery = searchQuery,
                 onSearchQueryChange = { homeViewModel.updateSearchQuery(it) },
                 onSearch = { homeViewModel.applySearchQuery() },
                 onPokemonClick = { pokemonId ->
-                    navController.navigate("detail/$pokemonId")
+                    navigateToDetail(pokemonId)
                 }
             )
         }
@@ -75,6 +71,7 @@ fun HomeRoute(
 
 @Composable
 fun HomeScreen(
+    padding: PaddingValues,
     pokemonList: LazyPagingItems<PokemonList>,
     searchQuery: String,
     onSearchQueryChange: (String) -> Unit,
@@ -83,6 +80,7 @@ fun HomeScreen(
 ) {
     Column(
         modifier = Modifier
+            .padding(padding)
             .fillMaxSize()
             .background(Color.Black)
     ) {

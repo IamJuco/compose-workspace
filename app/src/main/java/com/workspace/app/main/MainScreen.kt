@@ -1,23 +1,27 @@
 package com.workspace.app.main
 
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.navigation.compose.rememberNavController
 import com.workspace.app.main.component.BottomNavigationBar
+import com.workspace.app.main.component.MainNavGraph
+import com.workspace.app.main.navigation.MainNavigator
+import com.workspace.app.main.navigation.rememberMainNavigator
 
 @Composable
-fun MainScreen() {
-    val navController = rememberNavController()
+fun MainScreen(
+    navigator: MainNavigator = rememberMainNavigator(),
+) {
     Scaffold(
-        bottomBar = {
-            BottomNavigationBar(navController)
-        },
         content = { paddingValues ->
             MainNavGraph(
-                navController = navController,
-                modifier = Modifier.padding(paddingValues)
+                navigator = navigator,
+                padding = paddingValues
+            )
+        },
+        bottomBar = {
+            BottomNavigationBar(
+                currentMenu = navigator.currentMenu,
+                onMenuSelected = { navigator.navigate(it) }
             )
         }
     )
