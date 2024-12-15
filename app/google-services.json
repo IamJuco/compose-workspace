@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "899497896366",
+    "project_id": "composeworkspace",
+    "storage_bucket": "composeworkspace.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:899497896366:android:41b0c0e1a4e5adf8adc03f",
+        "android_client_info": {
+          "package_name": "com.workspace.main"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "899497896366-jchclps9t5le78bmqjvb731avaa0l49u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCtvV4IjVGmJwiVO6hV9OFR0fsLy3Z0vpw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "899497896366-jchclps9t5le78bmqjvb731avaa0l49u.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
