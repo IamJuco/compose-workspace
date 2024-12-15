@@ -61,7 +61,7 @@ dependencies {
     implementation(project(":feature:mypage"))
     implementation(project(":feature:detail"))
     implementation(project(":feature:login"))
-    implementation(project(":feature:register"))
+    implementation(project(":feature:signup"))
 
     implementation(project(":core:data"))
     implementation(project(":core:domain"))

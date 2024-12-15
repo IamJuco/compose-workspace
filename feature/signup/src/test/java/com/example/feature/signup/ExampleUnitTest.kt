@@ -1,4 +1,4 @@
-package com.example.feature.register
+package com.example.feature.signup
 
 import org.junit.Test
 

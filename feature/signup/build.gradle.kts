@@ -11,7 +11,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.feature.register"
+    namespace = "com.example.feature.signup"
     compileSdk = 35
 
     defaultConfig {
