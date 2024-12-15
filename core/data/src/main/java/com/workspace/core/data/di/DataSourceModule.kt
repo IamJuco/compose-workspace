@@ -1,6 +1,9 @@
 package com.workspace.core.data.di
 
+import com.google.firebase.auth.FirebaseAuth
 import com.workspace.core.data.api.PokeService
+import com.workspace.core.data.datasource.AuthDataSource
+import com.workspace.core.data.datasource.AuthDataSourceImpl
 import com.workspace.core.data.datasource.PokemonDataSource
 import com.workspace.core.data.datasource.PokemonDataSourceImpl
 import dagger.Module
@@ -17,5 +20,11 @@ object DataSourceModule {
     @Singleton
     fun providePokemonRemoteDataSource(service: PokeService): PokemonDataSource {
         return PokemonDataSourceImpl(service)
+    }
+
+    @Provides
+    @Singleton
+    fun provideAuthDataSource(firebaseAuth: FirebaseAuth): AuthDataSource {
+        return AuthDataSourceImpl(firebaseAuth)
     }
 }
