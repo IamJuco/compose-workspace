@@ -6,6 +6,8 @@ plugins {
     // Hilt
     id("com.google.dagger.hilt.android")
     id("com.google.devtools.ksp")
+    // Firebase
+    id("com.google.gms.google-services")
 }
 
 android {
