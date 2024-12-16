@@ -24,7 +24,7 @@ class AuthDataSourceImpl @Inject constructor(
             val result = firebaseAuth.signInWithEmailAndPassword(email, password).await()
             ServiceResult.Success(result.user!!)
         } catch (e: Exception) {
-            ServiceResult.Error(mapToErrorCode(e))
+            mapToErrorCode(e)
         }
     }
 
@@ -33,7 +33,7 @@ class AuthDataSourceImpl @Inject constructor(
             val result = firebaseAuth.createUserWithEmailAndPassword(email, password).await()
             ServiceResult.Success(result.user!!)
         } catch (e: Exception) {
-            ServiceResult.Error(mapToErrorCode(e))
+            mapToErrorCode(e)
         }
     }
 
@@ -43,12 +43,16 @@ class AuthDataSourceImpl @Inject constructor(
             val result = firebaseAuth.signInWithCredential(credential).await()
             ServiceResult.Success(result.user!!)
         } catch (e: Exception) {
-            ServiceResult.Error(mapToErrorCode(e))
+            mapToErrorCode(e)
         }
     }
 
     override suspend fun getCurrentUser(): ServiceResult<FirebaseUser?> {
-        return ServiceResult.Success(firebaseAuth.currentUser)
+        return try {
+            ServiceResult.Success(firebaseAuth.currentUser)
+        } catch (e: Exception) {
+            mapToErrorCode(e)
+        }
     }
 
     override suspend fun signOut() {

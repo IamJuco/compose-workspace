@@ -18,29 +18,18 @@ class PokemonDataSourceImpl(
         offset: Int,
         limit: Int
     ): ServiceResult<PokemonListResponse> {
-        return try {
-            val response = service.getPokemonList(offset, limit)
-            ServiceResult.Success(response)
-        } catch (e: Exception) {
-            ServiceResult.Error(mapToErrorCode(e))
-        }
+        return safeApiCall { service.getPokemonList(offset, limit) }
     }
 
     override suspend fun fetchPokemonDetail(pokemonId: Int): ServiceResult<PokemonResponse> {
+        return safeApiCall { service.getPokemon(pokemonId) }
+    }
+
+    private inline fun <T> safeApiCall(apiCall: () -> T): ServiceResult<T> {
         return try {
-            val response = service.getPokemon(pokemonId)
-            ServiceResult.Success(response)
+            ServiceResult.Success(apiCall())
         } catch (e: Exception) {
-            ServiceResult.Error(mapToErrorCode(e))
+            mapToErrorCode(e)
         }
     }
 }
-
-//    private fun mapToErrorCode(exception: Exception): ErrorCode {
-//        return when (exception) {
-//            is java.net.SocketTimeoutException -> ErrorCode.NETWORK_ERROR
-//            is java.io.IOException -> ErrorCode.NETWORK_ERROR
-//            is retrofit2.HttpException -> ErrorCode.API_ERROR
-//            else -> ErrorCode.NOT_FOUND
-//        }
-//    }

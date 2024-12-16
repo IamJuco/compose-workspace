@@ -19,6 +19,7 @@ import javax.inject.Inject
 class PokemonRepositoryImpl @Inject constructor(
     private val pokemonDataSource: PokemonDataSource
 ) : PokemonRepository {
+
     override fun getPokemonPagingData(): Flow<PagingData<PokemonList>> {
         return Pager(
             config = PagingConfig(
@@ -34,8 +35,7 @@ class PokemonRepositoryImpl @Inject constructor(
     override suspend fun getPokemonDetail(pokemonId: Int): ServiceResult<Pokemon> {
         return when (val result = pokemonDataSource.fetchPokemonDetail(pokemonId)) {
             is ServiceResult.Success -> ServiceResult.Success(result.data.toDomainModel())
-            is ServiceResult.Error -> ServiceResult.Error(result.error) // DataSource 에러 그대로 전달
-            else -> ServiceResult.Error(ErrorCode.UNKNOWN_ERROR)
+            is ServiceResult.Error -> result
         }
     }
 }

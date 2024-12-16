@@ -15,7 +15,7 @@ class AuthRepositoryImpl @Inject constructor(
     override suspend fun loginWithEmail(email: String, password: String): ServiceResult<User> {
         return when (val result = authDataSource.loginWithEmail(email, password)) {
             is ServiceResult.Success -> ServiceResult.Success(result.data.toDomainModel())
-            is ServiceResult.Error -> ServiceResult.Error(result.error)
+            is ServiceResult.Error -> result
             else -> ServiceResult.Error(ErrorCode.UNKNOWN_ERROR)
         }
     }
@@ -23,7 +23,7 @@ class AuthRepositoryImpl @Inject constructor(
     override suspend fun signUpWithEmail(email: String, password: String): ServiceResult<User> {
         return when (val result = authDataSource.signUpWithEmail(email, password)) {
             is ServiceResult.Success -> ServiceResult.Success(result.data.toDomainModel())
-            is ServiceResult.Error -> ServiceResult.Error(result.error)
+            is ServiceResult.Error -> result
             else -> ServiceResult.Error(ErrorCode.UNKNOWN_ERROR)
         }
     }
@@ -31,7 +31,7 @@ class AuthRepositoryImpl @Inject constructor(
     override suspend fun loginWithGoogle(idToken: String): ServiceResult<User> {
         return when (val result = authDataSource.loginWithGoogle(idToken)) {
             is ServiceResult.Success -> ServiceResult.Success(result.data.toDomainModel())
-            is ServiceResult.Error -> ServiceResult.Error(result.error)
+            is ServiceResult.Error -> result
             else -> ServiceResult.Error(ErrorCode.UNKNOWN_ERROR)
         }
     }
@@ -39,7 +39,7 @@ class AuthRepositoryImpl @Inject constructor(
     override suspend fun getCurrentUser(): ServiceResult<User?> {
         return when (val result = authDataSource.getCurrentUser()) {
             is ServiceResult.Success -> ServiceResult.Success(result.data?.toDomainModel())
-            is ServiceResult.Error -> ServiceResult.Error(result.error)
+            is ServiceResult.Error -> result
             else -> ServiceResult.Error(ErrorCode.UNKNOWN_ERROR)
         }
     }

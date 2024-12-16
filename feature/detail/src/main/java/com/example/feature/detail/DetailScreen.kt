@@ -22,6 +22,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -35,6 +36,7 @@ import com.example.feature.detail.component.PokemonImageCard
 import com.example.feature.detail.component.PokemonStatusCard
 import com.workspace.core.domain.model.Pokemon
 import com.workspace.core.domain.model.ServiceResult
+import com.workspace.core.domain.model.UiState
 
 @Composable
 fun DetailRoute(
@@ -43,23 +45,28 @@ fun DetailRoute(
     popBackStack: () -> Unit,
     padding: PaddingValues = PaddingValues()
 ) {
-    val pokemonDetail = detailViewModel.pokemonDetailState.collectAsStateWithLifecycle()
+    val state by detailViewModel.pokemonDetailState.collectAsStateWithLifecycle()
 
     LaunchedEffect(pokemonId) {
         detailViewModel.loadPokemonDetail(pokemonId)
     }
 
-    when (val result = pokemonDetail.value) {
-        is ServiceResult.Loading -> LoadingScreen()
-        is ServiceResult.Success -> DetailScreen(
-            pokemon = result.data,
-            onBackClick = { popBackStack() },
-            padding = padding
-        )
+    when (state) {
+        is UiState.Idle -> LoadingScreen()
+        is UiState.Loading -> LoadingScreen()
+        is UiState.Success -> {
+            val pokemon = (state as UiState.Success<Pokemon>).data
+            DetailScreen(
+                pokemon = pokemon,
+                onBackClick = { popBackStack() },
+                padding = padding
+            )
+        }
 
-        is ServiceResult.Error -> {
+        is UiState.Error -> {
+            val errorMessage = (state as UiState.Error).errorMessage ?: "Unknown Error"
             ErrorScreen(
-                errorMessage = result.error.message,
+                errorMessage = errorMessage,
                 onRetry = { detailViewModel.loadPokemonDetail(pokemonId) }
             )
         }

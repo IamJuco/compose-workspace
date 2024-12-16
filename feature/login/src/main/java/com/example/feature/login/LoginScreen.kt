@@ -1,7 +1,5 @@
 package com.example.feature.login
 
-import android.util.Log
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,10 +10,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -24,7 +20,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -48,7 +43,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.workspace.core.domain.model.ServiceResult
+import com.workspace.core.domain.model.UiState
+import com.workspace.core.domain.model.User
 
 @Composable
 fun LoginRoute(
@@ -60,25 +56,9 @@ fun LoginRoute(
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
+
     when (loginState) {
-        null -> LoginScreen(
-            padding = padding,
-            email = email,
-            onEmailChange = { email = it },
-            password = password,
-            onPasswordChange = { password = it },
-            onLoginClick = { viewModel.loginWithEmail(email, password) }
-        )
-        is ServiceResult.Loading -> LoadingScreen()
-        is ServiceResult.Success -> LoginScreen(
-            padding = padding,
-            email = email,
-            onEmailChange = { email = it },
-            password = password,
-            onPasswordChange = { password = it },
-            onLoginClick = { viewModel.loginWithEmail(email, password) }
-        )
-        is ServiceResult.Error -> {
+        is UiState.Idle -> {
             LoginScreen(
                 padding = padding,
                 email = email,
@@ -87,7 +67,25 @@ fun LoginRoute(
                 onPasswordChange = { password = it },
                 onLoginClick = { viewModel.loginWithEmail(email, password) }
             )
-            Log.d("0526", (loginState as ServiceResult.Error).error.message)
+        }
+        is UiState.Loading -> {
+            LoadingScreen()
+        }
+        is UiState.Success -> {
+            val user = (loginState as UiState.Success<User>).data
+            Text(text = "Welcome, ${user.nickName}")
+
+        }
+        is UiState.Error -> {
+            val errorMessage = (loginState as UiState.Error).errorMessage
+            LoginScreen(
+                padding = padding,
+                email = email,
+                onEmailChange = { email = it },
+                password = password,
+                onPasswordChange = { password = it },
+                onLoginClick = { viewModel.loginWithEmail(email, password) }
+            )
         }
     }
 }
@@ -286,17 +284,3 @@ fun ErrorScreen(
 fun GoogleLoginCard() {
 
 }
-
-//@Composable
-//@Preview(showBackground = true)
-//fun PreviewLoginScreen() {
-//    var email by remember { mutableStateOf("") }
-//    var password by remember { mutableStateOf("") }
-//    LoginScreen(
-//        padding = PaddingValues(),
-//        email = email,
-//        onEmailChange = { email = it },
-//        password = password,
-//        onPasswordChange = { password = it }
-//    )
-//}

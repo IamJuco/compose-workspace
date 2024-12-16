@@ -1,6 +1,5 @@
 package com.workspace.core.data.datasource
 
-import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.workspace.core.data.dto.PokemonResult
@@ -19,11 +18,7 @@ class PokemonPagingSource(
                     nextKey = if (result.data.next == null) null else offset + params.loadSize
                 )
             }
-            is ServiceResult.Error -> {
-                Log.d("PokemonPagingSource", "에러이유: ${result.error.message}")
-                LoadResult.Error(Throwable(result.error.message))
-            }
-            else -> LoadResult.Error(Throwable("Unknown error"))
+            is ServiceResult.Error -> LoadResult.Error(Exception(result.errorMessage))
         }
     }
 
