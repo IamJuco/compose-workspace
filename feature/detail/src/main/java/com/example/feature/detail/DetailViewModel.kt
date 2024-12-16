@@ -17,12 +17,12 @@ class DetailViewModel @Inject constructor(
     private val getPokemonDetailUseCase: GetPokemonDetailUseCase
 ) : ViewModel() {
 
-    private val _pokemonDetail = MutableStateFlow<ServiceResult<Pokemon>>(ServiceResult.Loading)
-    val pokemonDetail: StateFlow<ServiceResult<Pokemon>> = _pokemonDetail
+    private val _pokemonDetailState = MutableStateFlow<ServiceResult<Pokemon>>(ServiceResult.Loading)
+    val pokemonDetailState: StateFlow<ServiceResult<Pokemon>> = _pokemonDetailState
 
     fun loadPokemonDetail(pokemonId: Int) {
         viewModelScope.launch {
-            _pokemonDetail.update { getPokemonDetailUseCase(pokemonId) }
+            _pokemonDetailState.update { getPokemonDetailUseCase(pokemonId) }
         }
     }
 }

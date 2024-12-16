@@ -43,7 +43,7 @@ fun DetailRoute(
     popBackStack: () -> Unit,
     padding: PaddingValues = PaddingValues()
 ) {
-    val pokemonDetail = detailViewModel.pokemonDetail.collectAsStateWithLifecycle()
+    val pokemonDetail = detailViewModel.pokemonDetailState.collectAsStateWithLifecycle()
 
     LaunchedEffect(pokemonId) {
         detailViewModel.loadPokemonDetail(pokemonId)
