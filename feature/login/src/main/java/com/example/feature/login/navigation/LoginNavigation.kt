@@ -13,11 +13,13 @@ fun NavController.navigateLogin(navOptions: NavOptions) {
 }
 
 fun NavGraphBuilder.loginNavGraph(
-    padding: PaddingValues
+    padding: PaddingValues,
+    onShowSnackBar: (String) -> Unit
 ) {
     composable<RouteModel.Login> {
         LoginRoute(
-            padding = padding
+            padding = padding,
+            onShowSnackBar = onShowSnackBar
         )
     }
 }

@@ -13,6 +13,7 @@ import com.workspace.feature.mypage.myPageNavGraph
 fun MainNavHost(
     navigator: MainNavigator,
     padding: PaddingValues,
+    onShowSnackBar: (String) -> Unit
 ) {
     NavHost(
         navController = navigator.navController,
@@ -33,7 +34,8 @@ fun MainNavHost(
         )
 
         loginNavGraph(
-            padding = padding
+            padding = padding,
+            onShowSnackBar = onShowSnackBar
         )
     }
 }

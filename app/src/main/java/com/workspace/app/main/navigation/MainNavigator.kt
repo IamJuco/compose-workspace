@@ -18,7 +18,7 @@ import com.workspace.feature.mypage.navigateMyPage
 class MainNavigator(
     val navController: NavHostController
 ) {
-    val startDestination = MainMenu.HOME.route
+    val startDestination = RouteModel.Login
     val currentDestination: NavDestination?
         @Composable get() = navController.currentBackStackEntryAsState().value?.destination
     val currentMenu: MainMenu?

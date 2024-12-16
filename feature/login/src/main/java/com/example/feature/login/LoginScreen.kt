@@ -1,5 +1,6 @@
 package com.example.feature.login
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -22,6 +23,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -44,48 +46,51 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.workspace.core.domain.model.UiState
-import com.workspace.core.domain.model.User
 
 @Composable
 fun LoginRoute(
     padding: PaddingValues = PaddingValues(),
-    viewModel: LoginViewModel = hiltViewModel()
+    viewModel: LoginViewModel = hiltViewModel(),
+    onShowSnackBar: (String) -> Unit
 ) {
     val loginState by viewModel.loginWithEmailState.collectAsStateWithLifecycle()
 
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
+    Box(modifier = Modifier.fillMaxSize()) {
+        LoginScreen(
+            padding = padding,
+            email = email,
+            onEmailChange = { email = it },
+            password = password,
+            onPasswordChange = { password = it },
+            onLoginClick = { viewModel.loginWithEmail(email, password) }
+        )
 
-    when (loginState) {
-        is UiState.Idle -> {
-            LoginScreen(
-                padding = padding,
-                email = email,
-                onEmailChange = { email = it },
-                password = password,
-                onPasswordChange = { password = it },
-                onLoginClick = { viewModel.loginWithEmail(email, password) }
-            )
+        if (loginState is UiState.Loading) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.Black.copy(alpha = 0.5f)),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator(color = Color.White)
+            }
         }
-        is UiState.Loading -> {
-            LoadingScreen()
-        }
-        is UiState.Success -> {
-            val user = (loginState as UiState.Success<User>).data
-            Text(text = "Welcome, ${user.nickName}")
+    }
 
-        }
-        is UiState.Error -> {
-            val errorMessage = (loginState as UiState.Error).errorMessage
-            LoginScreen(
-                padding = padding,
-                email = email,
-                onEmailChange = { email = it },
-                password = password,
-                onPasswordChange = { password = it },
-                onLoginClick = { viewModel.loginWithEmail(email, password) }
-            )
+    LaunchedEffect(loginState) {
+        when {
+            loginState is UiState.Success -> {
+                onShowSnackBar("로그인 성공")
+            }
+
+            loginState is UiState.Error -> {
+                val errorMessage =
+                    (loginState as UiState.Error).errorMessage ?: "알 수 없는 오류가 발생했습니다."
+                onShowSnackBar(errorMessage)
+            }
         }
     }
 }
