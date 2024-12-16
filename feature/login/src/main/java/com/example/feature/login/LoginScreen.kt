@@ -1,6 +1,8 @@
 package com.example.feature.login
 
+import android.widget.Toast
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -32,6 +34,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -45,6 +48,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.google.firebase.auth.FirebaseAuth
 import com.workspace.core.domain.model.UiState
 
 @Composable
@@ -65,7 +69,14 @@ fun LoginRoute(
             onEmailChange = { email = it },
             password = password,
             onPasswordChange = { password = it },
-            onLoginClick = { viewModel.loginWithEmail(email, password) }
+            onLoginClick = {
+                if (!isValidEmail(email)) {
+                    onShowSnackBar("유효하지 않은 이메일 형식입니다.")
+                } else {
+                    viewModel.loginWithEmail(email, password)
+                }
+            }
+
         )
 
         if (loginState is UiState.Loading) {
@@ -104,6 +115,7 @@ fun LoginScreen(
     onPasswordChange: (String) -> Unit,
     onLoginClick: () -> Unit
 ) {
+    val context = LocalContext.current
     Column(
         modifier = Modifier
             .padding(padding)
@@ -144,7 +156,15 @@ fun LoginScreen(
         ) {
             Text(
                 text = "아이디 찾기",
-                fontSize = 16.sp
+                fontSize = 16.sp,
+                modifier = Modifier.clickable {
+                    FirebaseAuth.getInstance().signOut()
+                    Toast.makeText(
+                        context,
+                        "로그아웃 되었습니다.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
             )
             Text(
                 text = "ㅣ",
@@ -160,7 +180,7 @@ fun LoginScreen(
             )
             Text(
                 text = "회원가입",
-                fontSize = 16.sp
+                fontSize = 16.sp,
             )
         }
     }
@@ -283,6 +303,11 @@ fun ErrorScreen(
             Text(text = "다시 시도")
         }
     }
+}
+
+private fun isValidEmail(email: String): Boolean {
+    val emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$".toRegex()
+    return emailRegex.matches(email)
 }
 
 @Composable
