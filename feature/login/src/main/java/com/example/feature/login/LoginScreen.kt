@@ -55,7 +55,8 @@ import com.workspace.core.domain.model.UiState
 fun LoginRoute(
     padding: PaddingValues = PaddingValues(),
     viewModel: LoginViewModel = hiltViewModel(),
-    onShowSnackBar: (String) -> Unit
+    onShowSnackBar: (String) -> Unit,
+    navigateToHome: () -> Unit = {}
 ) {
     val loginState by viewModel.loginWithEmailState.collectAsStateWithLifecycle()
 
@@ -95,6 +96,7 @@ fun LoginRoute(
         when {
             loginState is UiState.Success -> {
                 onShowSnackBar("로그인 성공")
+                navigateToHome()
             }
 
             loginState is UiState.Error -> {

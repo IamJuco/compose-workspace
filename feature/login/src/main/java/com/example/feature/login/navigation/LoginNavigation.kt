@@ -14,12 +14,14 @@ fun NavController.navigateLogin(navOptions: NavOptions) {
 
 fun NavGraphBuilder.loginNavGraph(
     padding: PaddingValues,
-    onShowSnackBar: (String) -> Unit
+    onShowSnackBar: (String) -> Unit,
+    navigateToHome: () -> Unit
 ) {
     composable<RouteModel.Login> {
         LoginRoute(
             padding = padding,
-            onShowSnackBar = onShowSnackBar
+            onShowSnackBar = onShowSnackBar,
+            navigateToHome = navigateToHome
         )
     }
 }
