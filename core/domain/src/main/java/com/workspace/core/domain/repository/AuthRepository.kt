@@ -7,6 +7,6 @@ interface AuthRepository {
     suspend fun loginWithEmail(email: String, password: String): ServiceResult<User>
     suspend fun signUpWithEmail(email: String, password: String): ServiceResult<User>
     suspend fun loginWithGoogle(idToken: String): ServiceResult<User>
-    suspend fun getCurrentUser(): ServiceResult<User?>
     suspend fun signOut()
+    suspend fun checkTokenForExpire(): Boolean
 }

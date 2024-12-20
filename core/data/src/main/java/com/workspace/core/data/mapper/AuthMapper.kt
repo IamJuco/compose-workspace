@@ -8,6 +8,6 @@ fun FirebaseUser.toDomainModel(): User {
         id = uid,
         email = email,
         nickName = displayName,
-        profile = photoUrl?.toString()
+        profile = photoUrl?.toString(),
     )
 }
