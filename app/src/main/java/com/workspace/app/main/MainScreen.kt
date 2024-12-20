@@ -12,7 +12,10 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -21,6 +24,7 @@ import com.workspace.app.main.component.BottomNavigationBar
 import com.workspace.app.main.component.MainNavHost
 import com.workspace.app.main.navigation.MainNavigator
 import com.workspace.app.main.navigation.rememberMainNavigator
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
@@ -31,20 +35,23 @@ fun MainScreen(
     val lifecycleScope = LocalLifecycleOwner.current.lifecycleScope
     val snackBarHostState = remember { SnackbarHostState() }
 
-    val initialScreenStateState = viewModel.initialScreenState.collectAsStateWithLifecycle()
-    val initialScreenState = initialScreenStateState.value
+    val initialScreenState by viewModel.initialScreenState.collectAsStateWithLifecycle()
 
     val onShowSnackBar: (String) -> Unit = { msg ->
         lifecycleScope.launch { snackBarHostState.showSnackbar(msg) }
     }
 
     LaunchedEffect(initialScreenState) {
-        when (initialScreenState) {
-            MainViewModel.ScreenState.Home -> navigator.navigateToHome()
-            MainViewModel.ScreenState.Login -> navigator.navigateLogin()
-            else -> Unit
+        if (initialScreenState is MainViewModel.ScreenState.Loading) {
+            delay(5_000)
+            navigator.navigateLogin()
+        }
+        when {
+            initialScreenState is MainViewModel.ScreenState.Home -> navigator.navigateToHome()
+            initialScreenState is MainViewModel.ScreenState.Login -> navigator.navigateLogin()
         }
     }
+
 
     Scaffold(
         snackbarHost = { SnackbarHost(snackBarHostState) },
@@ -67,4 +74,15 @@ fun MainScreen(
             }
         }
     )
+}
+
+@Composable
+fun LoadingScreen() {
+    Box(
+        modifier = Modifier
+            .fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        CircularProgressIndicator()
+    }
 }

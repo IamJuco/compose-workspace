@@ -18,7 +18,7 @@ import com.workspace.feature.mypage.navigateMyPage
 class MainNavigator(
     val navController: NavHostController
 ) {
-    val startDestination = RouteModel.Login
+    val startDestination = MainMenu.HOME.route
     val currentDestination: NavDestination?
         @Composable get() = navController.currentBackStackEntryAsState().value?.destination
     val currentMenu: MainMenu?
@@ -28,6 +28,10 @@ class MainNavigator(
     private val singleTopOptions = navOptions {
         launchSingleTop = true
         restoreState = true
+    }
+
+    private val allBackStackInclusiveTrue = navOptions {
+        popUpTo(0) { inclusive = true }
     }
 
     fun navigate(menu: MainMenu) {
@@ -47,7 +51,7 @@ class MainNavigator(
     fun navigateToDetail(pokemonId: Int) = navController.navigateToDetail(pokemonId = pokemonId, navOptions  = singleTopOptions)
     fun navigateLogin() = navController.navigateLogin(navOptions  = singleTopOptions)
 //    fun navigateToSignUp() = navController.navigateToSignUp(navOptions  = singleTopOptions)
-    fun navigateToHome() = navController.navigateHome(navOptions = singleTopOptions)
+    fun navigateToHome() = navController.navigateHome(navOptions = allBackStackInclusiveTrue)
 
     fun popBackStack() {
         navController.popBackStack()
