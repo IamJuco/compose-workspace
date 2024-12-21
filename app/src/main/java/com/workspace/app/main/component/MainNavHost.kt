@@ -43,7 +43,8 @@ fun MainNavHost(
         loginNavGraph(
             padding = padding,
             onShowSnackBar = onShowSnackBar,
-            navigateToHome = navigator::navigateToHome
+            navigateToHome = navigator::navigateToHome,
+            navigateToSignUp = navigator::navigateToSignUp
         )
 
         signUpNavGraph(

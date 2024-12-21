@@ -59,7 +59,8 @@ fun LoginRoute(
     padding: PaddingValues = PaddingValues(),
     viewModel: LoginViewModel = hiltViewModel(),
     onShowSnackBar: (String) -> Unit,
-    navigateToHome: () -> Unit = {}
+    navigateToHome: () -> Unit = {},
+    navigateToSignUp: () -> Unit = {}
 ) {
     val loginState by viewModel.loginWithEmailState.collectAsStateWithLifecycle()
 
@@ -74,7 +75,8 @@ fun LoginRoute(
             password = password,
             onPasswordChange = { password = it },
             onLoginClick = { viewModel.loginWithEmail(email, password) },
-            isButtonEnabled = isValidEmail(email)
+            isButtonEnabled = isValidEmail(email),
+            navigateToSignUp = { navigateToSignUp() }
         )
 
         if (loginState is UiState.Loading) {
@@ -106,7 +108,8 @@ fun LoginScreen(
     password: String,
     onPasswordChange: (String) -> Unit,
     onLoginClick: () -> Unit,
-    isButtonEnabled: Boolean
+    isButtonEnabled: Boolean,
+    navigateToSignUp: () -> Unit
 ) {
     val context = LocalContext.current
     Column(
@@ -175,6 +178,9 @@ fun LoginScreen(
             Text(
                 text = "회원가입",
                 fontSize = 16.sp,
+                modifier = Modifier.clickable {
+                    navigateToSignUp()
+                }
             )
         }
     }
