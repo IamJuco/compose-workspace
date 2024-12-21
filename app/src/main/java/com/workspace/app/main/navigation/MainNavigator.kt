@@ -49,7 +49,7 @@ class MainNavigator(
     }
 
     fun navigateToDetail(pokemonId: Int) = navController.navigateToDetail(pokemonId = pokemonId, navOptions  = singleTopOptions)
-    fun navigateLogin() = navController.navigateLogin(navOptions  = singleTopOptions)
+    fun navigateLogin() = navController.navigateLogin(navOptions  = allBackStackInclusiveTrue)
 //    fun navigateToSignUp() = navController.navigateToSignUp(navOptions  = singleTopOptions)
     fun navigateToHome() = navController.navigateHome(navOptions = allBackStackInclusiveTrue)
 
