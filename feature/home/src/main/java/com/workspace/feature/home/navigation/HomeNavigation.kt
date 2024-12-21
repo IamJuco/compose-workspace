@@ -21,7 +21,9 @@ fun NavGraphBuilder.homeNavGraph(
     composable<MainMenuRoute.Home> {
         HomeRoute(
             navigateToDetail = navigateToDetail,
-            padding = padding
+            padding = padding,
+            onShowLoginSnackBar = onShowLoginSnackBar,
+            hasToken = hasToken
         )
     }
 }

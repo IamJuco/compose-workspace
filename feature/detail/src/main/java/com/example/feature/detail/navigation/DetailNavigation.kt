@@ -24,7 +24,9 @@ fun NavGraphBuilder.detailNavGraph(
         DetailRoute(
             pokemonId = pokemonId,
             popBackStack = popBackStack,
-            padding = padding
+            padding = padding,
+            onShowLoginSnackBar = onShowLoginSnackBar,
+            hasToken = hasToken
         )
     }
 }
