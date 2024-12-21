@@ -13,7 +13,7 @@ fun BottomNavigationBar(
     currentMenu: MainMenu?,
     onMenuSelected: (MainMenu) -> Unit,
     onShowLoginSnackBar: () -> Unit,
-    hasToken: Boolean
+    hasToken: Boolean = false
 ) {
     NavigationBar {
         MainMenu.entries.forEach { menu ->

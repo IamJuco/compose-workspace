@@ -32,14 +32,17 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -70,25 +73,12 @@ fun LoginRoute(
             onEmailChange = { email = it },
             password = password,
             onPasswordChange = { password = it },
-            onLoginClick = {
-                if (!isValidEmail(email)) {
-                    onShowSnackBar("유효하지 않은 이메일 형식입니다.")
-                } else {
-                    viewModel.loginWithEmail(email, password)
-                }
-            }
-
+            onLoginClick = { viewModel.loginWithEmail(email, password) },
+            isButtonEnabled = isValidEmail(email)
         )
 
         if (loginState is UiState.Loading) {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(Color.Black.copy(alpha = 0.5f)),
-                contentAlignment = Alignment.Center
-            ) {
-                CircularProgressIndicator(color = Color.White)
-            }
+            LoadingScreen()
         }
     }
 
@@ -115,7 +105,8 @@ fun LoginScreen(
     onEmailChange: (String) -> Unit,
     password: String,
     onPasswordChange: (String) -> Unit,
-    onLoginClick: () -> Unit
+    onLoginClick: () -> Unit,
+    isButtonEnabled: Boolean
 ) {
     val context = LocalContext.current
     Column(
@@ -138,6 +129,7 @@ fun LoginScreen(
                 .padding(top = 24.dp)
                 .height(64.dp),
             onClick = { onLoginClick() },
+            enabled = isButtonEnabled,
             colors = ButtonDefaults.buttonColors(containerColor = Color.Magenta)
         ) {
             Text(
@@ -250,7 +242,8 @@ fun LoginFieldCard(
             onValueChange = onEmailChange,
             placeholder = { Text("이메일") },
             keyboardOptions = KeyboardOptions.Default.copy(
-                keyboardType = KeyboardType.Email
+                keyboardType = KeyboardType.Email,
+                imeAction = ImeAction.Next
             )
         )
 
@@ -262,7 +255,8 @@ fun LoginFieldCard(
             onValueChange = onPasswordChange,
             placeholder = { Text("비밀번호") },
             keyboardOptions = KeyboardOptions.Default.copy(
-                keyboardType = KeyboardType.Password
+                keyboardType = KeyboardType.Password,
+                imeAction = ImeAction.Done
             ),
             visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
             trailingIcon = {
@@ -281,10 +275,20 @@ fun LoginFieldCard(
 fun LoadingScreen() {
     Box(
         modifier = Modifier
-            .fillMaxSize(),
+            .fillMaxSize()
+            .background(Color.Black.copy(alpha = 0.5f))
+            .pointerInput(Unit) {
+                awaitPointerEventScope {
+                    while (true) {
+                        awaitPointerEvent()
+                    }
+                }
+            },
         contentAlignment = Alignment.Center
     ) {
-        CircularProgressIndicator()
+        CircularProgressIndicator(
+            color = Color.White
+        )
     }
 }
 
@@ -308,7 +312,7 @@ fun ErrorScreen(
 }
 
 private fun isValidEmail(email: String): Boolean {
-    val emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$".toRegex()
+    val emailRegex = "[0-9a-zA-Z]+(.[_a-z0-9-]+)*@(?:\\w+\\.)+\\w+$".toRegex()
     return emailRegex.matches(email)
 }
 
