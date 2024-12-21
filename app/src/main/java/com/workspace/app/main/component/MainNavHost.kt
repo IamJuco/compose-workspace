@@ -13,7 +13,9 @@ import com.workspace.feature.mypage.myPageNavGraph
 fun MainNavHost(
     navigator: MainNavigator,
     padding: PaddingValues,
-    onShowSnackBar: (String) -> Unit
+    onShowSnackBar: (String) -> Unit,
+    onShowLoginSnackBar: () -> Unit,
+    hasToken: Boolean
 ) {
     NavHost(
         navController = navigator.navController,
@@ -21,7 +23,9 @@ fun MainNavHost(
     ) {
         homeNavGraph(
             padding = padding,
-            navigateToDetail = navigator::navigateToDetail
+            navigateToDetail = navigator::navigateToDetail,
+            onShowLoginSnackBar = onShowLoginSnackBar,
+            hasToken = hasToken
         )
 
         myPageNavGraph(
@@ -30,7 +34,9 @@ fun MainNavHost(
 
         detailNavGraph(
             popBackStack = navigator::popBackStack,
-            padding = padding
+            padding = padding,
+            onShowLoginSnackBar = onShowLoginSnackBar,
+            hasToken = hasToken
         )
 
         loginNavGraph(

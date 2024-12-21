@@ -15,7 +15,9 @@ fun NavController.navigateToDetail(pokemonId: Int, navOptions: NavOptions? = nul
 
 fun NavGraphBuilder.detailNavGraph(
     popBackStack: () -> Unit,
-    padding: PaddingValues
+    padding: PaddingValues,
+    onShowLoginSnackBar: () -> Unit,
+    hasToken: Boolean
 ) {
     composable<RouteModel.Detail> { navBackStackEntry ->
         val pokemonId = navBackStackEntry.toRoute<RouteModel.Detail>().pokemonId

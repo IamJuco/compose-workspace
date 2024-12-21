@@ -37,7 +37,9 @@ const val GRID_COLUMN = 2
 fun HomeRoute(
     navigateToDetail: (Int) -> Unit = {},
     homeViewModel: HomeViewModel = hiltViewModel(),
-    padding: PaddingValues = PaddingValues()
+    padding: PaddingValues = PaddingValues(),
+    onShowLoginSnackBar: () -> Unit,
+    hasToken: Boolean
 ) {
     val pokemonList = homeViewModel.pokemonPagingData.collectAsLazyPagingItems()
     val searchQuery by homeViewModel.searchQuery.collectAsStateWithLifecycle()

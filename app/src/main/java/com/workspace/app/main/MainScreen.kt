@@ -1,5 +1,6 @@
 package com.workspace.app.main
 
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -8,8 +9,10 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -24,6 +27,7 @@ import com.workspace.app.main.component.BottomNavigationBar
 import com.workspace.app.main.component.MainNavHost
 import com.workspace.app.main.navigation.MainNavigator
 import com.workspace.app.main.navigation.rememberMainNavigator
+import com.workspace.core.domain.model.ErrorCode
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -36,6 +40,22 @@ fun MainScreen(
     val snackBarHostState = remember { SnackbarHostState() }
 
     val initialScreenState by viewModel.initialScreenState.collectAsStateWithLifecycle()
+    val hasToken by viewModel.userAccessTokenState.collectAsStateWithLifecycle()
+    Log.d("0526Token", hasToken.toString())
+
+    val onShowLoginSnackBar: () -> Unit = {
+        lifecycleScope.launch {
+            snackBarHostState.showSnackbar(
+                message = "로그인 후 이용 가능한 서비스입니다.",
+                actionLabel = "로그인",
+                duration = SnackbarDuration.Short
+            ).let { result ->
+                if (result == SnackbarResult.ActionPerformed) {
+                    navigator.navigateLogin()
+                }
+            }
+        }
+    }
 
     val onShowSnackBar: (String) -> Unit = { msg ->
         lifecycleScope.launch { snackBarHostState.showSnackbar(msg) }
@@ -44,6 +64,7 @@ fun MainScreen(
     LaunchedEffect(initialScreenState) {
         if (initialScreenState is MainViewModel.ScreenState.Loading) {
             delay(5_000)
+            onShowSnackBar(ErrorCode.NETWORK_TIMEOUT.message)
             navigator.navigateLogin()
         }
         when {
@@ -52,14 +73,15 @@ fun MainScreen(
         }
     }
 
-
     Scaffold(
         snackbarHost = { SnackbarHost(snackBarHostState) },
         content = { paddingValues ->
             MainNavHost(
                 navigator = navigator,
                 padding = paddingValues,
-                onShowSnackBar = onShowSnackBar
+                onShowSnackBar = onShowSnackBar,
+                onShowLoginSnackBar = onShowLoginSnackBar,
+                hasToken = hasToken
             )
         },
         bottomBar = {
@@ -69,7 +91,9 @@ fun MainScreen(
             ) {
                 BottomNavigationBar(
                     currentMenu = navigator.currentMenu,
-                    onMenuSelected = { navigator.navigate(it) }
+                    onMenuSelected = { navigator.navigate(it) },
+                    onShowLoginSnackBar = onShowLoginSnackBar,
+                    hasToken = hasToken
                 )
             }
         }

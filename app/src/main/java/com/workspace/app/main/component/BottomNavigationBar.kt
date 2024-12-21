@@ -11,17 +11,28 @@ import com.workspace.app.main.navigation.MainMenu
 @Composable
 fun BottomNavigationBar(
     currentMenu: MainMenu?,
-    onMenuSelected: (MainMenu) -> Unit
+    onMenuSelected: (MainMenu) -> Unit,
+    onShowLoginSnackBar: () -> Unit,
+    hasToken: Boolean
 ) {
     NavigationBar {
         MainMenu.entries.forEach { menu ->
             NavigationBarItem(
                 icon = {
-                    Icon(painterResource(menu.iconResId), contentDescription = menu.contentDescription)
+                    Icon(
+                        painterResource(menu.iconResId),
+                        contentDescription = menu.contentDescription
+                    )
                 },
                 label = { Text(menu.contentDescription) },
                 selected = menu == currentMenu,
-                onClick = { onMenuSelected(menu) }
+                onClick = {
+                    if (hasToken) {
+                        onMenuSelected(menu)
+                    } else {
+                        onShowLoginSnackBar()
+                    }
+                }
             )
         }
     }
