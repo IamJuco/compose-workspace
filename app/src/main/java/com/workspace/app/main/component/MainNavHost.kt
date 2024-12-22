@@ -5,6 +5,9 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import com.example.feature.detail.navigation.detailNavGraph
 import com.example.feature.login.navigation.loginNavGraph
+import com.example.feature.signup.navigation.emailCheckNavGraph
+import com.example.feature.signup.navigation.emailVerificationNavGraph
+import com.example.feature.signup.navigation.passwordCheckNavGraph
 import com.example.feature.signup.navigation.signUpNavGraph
 import com.workspace.app.main.navigation.MainNavigator
 import com.workspace.feature.home.navigation.homeNavGraph
@@ -51,6 +54,18 @@ fun MainNavHost(
             padding = padding,
             navigateToLogin = navigator::navigateLogin,
             onShowSnackBar = onShowSnackBar
+        )
+
+        emailCheckNavGraph(
+            padding = padding
+        )
+
+        emailVerificationNavGraph(
+            padding = padding
+        )
+
+        passwordCheckNavGraph(
+            padding = padding
         )
     }
 }

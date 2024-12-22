@@ -11,6 +11,9 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import com.example.feature.detail.navigation.navigateToDetail
 import com.example.feature.login.navigation.navigateLogin
+import com.example.feature.signup.navigation.navigateToEmailCheck
+import com.example.feature.signup.navigation.navigateToEmailVerification
+import com.example.feature.signup.navigation.navigateToPasswordCheck
 import com.example.feature.signup.navigation.navigateToSignUp
 import com.workspace.core.domain.navigation.RouteModel
 import com.workspace.feature.home.navigation.navigateHome
@@ -53,6 +56,9 @@ class MainNavigator(
     fun navigateLogin() = navController.navigateLogin(navOptions  = allBackStackInclusiveTrue)
     fun navigateToSignUp() = navController.navigateToSignUp(navOptions  = singleTopOptions)
     fun navigateToHome() = navController.navigateHome(navOptions = allBackStackInclusiveTrue)
+    fun navigateToEmailCheck() = navController.navigateToEmailCheck(navOptions = singleTopOptions)
+    fun navigateToEmailVerification() = navController.navigateToEmailVerification(navOptions = singleTopOptions)
+    fun navigateToPasswordCheck() = navController.navigateToPasswordCheck(navOptions = singleTopOptions)
 
     fun popBackStack() {
         navController.popBackStack()

@@ -7,10 +7,19 @@ sealed interface RouteModel {
     data object Login : RouteModel
 
     @Serializable
+    data class Detail(val pokemonId: Int) : MainMenuRoute
+
+    @Serializable
     data object SignUp : RouteModel
 
     @Serializable
-    data class Detail(val pokemonId: Int) : MainMenuRoute
+    data object EmailCheck : RouteModel
+
+    @Serializable
+    data object EmailVerification : RouteModel
+
+    @Serializable
+    data object PasswordCheck : RouteModel
 }
 
 sealed interface MainMenuRoute : RouteModel {
