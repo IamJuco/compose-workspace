@@ -49,7 +49,8 @@ fun MainNavHost(
 
         signUpNavGraph(
             padding = padding,
-            navigateToLogin = navigator::navigateLogin
+            navigateToLogin = navigator::navigateLogin,
+            onShowSnackBar = onShowSnackBar
         )
     }
 }

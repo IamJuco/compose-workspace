@@ -14,12 +14,14 @@ fun NavController.navigateToSignUp(navOptions: NavOptions) {
 
 fun NavGraphBuilder.signUpNavGraph(
     padding: PaddingValues,
-    navigateToLogin: () -> Unit
+    navigateToLogin: () -> Unit,
+    onShowSnackBar: (String) -> Unit
 ) {
     composable<RouteModel.SignUp> {
         SignUpRoute(
             padding = padding,
             navigateToLogin = navigateToLogin,
+            onShowSnackBar = onShowSnackBar
         )
     }
 }
