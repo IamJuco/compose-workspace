@@ -8,7 +8,9 @@ import javax.inject.Inject
 class SignUpWithEmailUseCase @Inject constructor(
     private val repository: AuthRepository
 ) {
-    suspend operator fun invoke(email: String, password: String): ServiceResult<User> {
-        return repository.signUpWithEmail(email, password)
+    //TODO null 처리해줘야함
+    suspend operator fun invoke(password: String): ServiceResult<User> {
+        val pref = repository.tempGetUserEmailFromSharedPreferences()
+        return repository.signUpWithEmail(pref!!, password)
     }
 }

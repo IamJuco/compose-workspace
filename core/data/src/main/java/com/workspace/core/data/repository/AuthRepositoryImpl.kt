@@ -108,6 +108,10 @@ class AuthRepositoryImpl @Inject constructor(
         sharedPreferences.edit().putString(Constants.FIREBASE_TEMP_SAVE_USER_EMAIL, email).apply()
     }
 
+    override fun tempGetUserEmailFromSharedPreferences(): String? {
+        return sharedPreferences.getString(Constants.FIREBASE_TEMP_SAVE_USER_EMAIL, null)
+    }
+
     private fun saveTokenToSharedPreferences(token: String?) {
         sharedPreferences.edit().putString(Constants.FIREBASE_USER_TOKEN, token).apply()
     }

@@ -13,4 +13,5 @@ interface AuthRepository {
     suspend fun deleteAccount(): ServiceResult<Unit>
     suspend fun isEmailVerified(): ServiceResult<Boolean>
     fun tempSaveUserEmailToSharedPreferences(email: String)
+    fun tempGetUserEmailFromSharedPreferences(): String?
 }

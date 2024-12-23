@@ -4,9 +4,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.workspace.core.domain.model.ServiceResult
 import com.workspace.core.domain.model.UiState
+import com.workspace.core.domain.model.User
 import com.workspace.core.domain.usecase.DeleteTempAccountUseCase
 import com.workspace.core.domain.usecase.IsEmailVerifiedUseCase
 import com.workspace.core.domain.usecase.SignUpAndSendVerificationCodeUseCase
+import com.workspace.core.domain.usecase.SignUpWithEmailUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -18,13 +20,17 @@ import javax.inject.Inject
 class SignUpViewModel @Inject constructor(
     private val signUpAndSendVerificationCodeUseCase: SignUpAndSendVerificationCodeUseCase,
     private val deleteTempAccountUseCase: DeleteTempAccountUseCase,
-    private val isEmailVerifiedUseCase: IsEmailVerifiedUseCase
+    private val isEmailVerifiedUseCase: IsEmailVerifiedUseCase,
+    private val signUpWithEmailUseCase: SignUpWithEmailUseCase
 ) : ViewModel() {
     private val _verificationEmailState = MutableStateFlow<UiState<Unit>>(UiState.Idle)
     val verificationEmailState: StateFlow<UiState<Unit>> = _verificationEmailState
 
     private val _isEmailVerifiedState = MutableStateFlow<UiState<Boolean>>(UiState.Idle)
     val isEmailVerifiedState: StateFlow<UiState<Boolean>> = _isEmailVerifiedState
+
+    private val _signUpState = MutableStateFlow<UiState<User>>(UiState.Idle)
+    val signUpState: StateFlow<UiState<User>> = _signUpState
 
     fun sendVerificationEmail(email: String) {
         viewModelScope.launch {
@@ -47,6 +53,21 @@ class SignUpViewModel @Inject constructor(
             when (val result = isEmailVerifiedUseCase()) {
                 is ServiceResult.Success -> _isEmailVerifiedState.update { UiState.Success(result.data) }
                 is ServiceResult.Error -> _isEmailVerifiedState.update {
+                    UiState.Error(
+                        result.errorCode,
+                        result.errorMessage
+                    )
+                }
+            }
+        }
+    }
+
+    fun signUpWithEmail(password: String) {
+        viewModelScope.launch {
+            _signUpState.update { UiState.Loading }
+            when (val result = signUpWithEmailUseCase(password)) {
+                is ServiceResult.Success -> _signUpState.update { UiState.Success(result.data) }
+                is ServiceResult.Error -> _signUpState.update {
                     UiState.Error(
                         result.errorCode,
                         result.errorMessage
