@@ -5,8 +5,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
-import com.example.feature.signup.ui.EmailCheckRoute
-import com.example.feature.signup.ui.EmailVerificationRoute
+import com.example.feature.signup.screen.EmailVerificationRoute
 import com.workspace.core.domain.navigation.RouteModel
 
 fun NavController.navigateToEmailVerification(navOptions: NavOptions) {
@@ -14,11 +13,15 @@ fun NavController.navigateToEmailVerification(navOptions: NavOptions) {
 }
 
 fun NavGraphBuilder.emailVerificationNavGraph(
-    padding: PaddingValues
+    padding: PaddingValues,
+    navigateToPasswordCheck: () -> Unit,
+    onShowSnackBar: (String) -> Unit
 ) {
     composable<RouteModel.EmailVerification> {
         EmailVerificationRoute(
-            padding = padding
+            padding = padding,
+            navigateToPasswordCheck = navigateToPasswordCheck,
+            onShowSnackBar = onShowSnackBar
         )
     }
 }
