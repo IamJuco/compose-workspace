@@ -74,7 +74,7 @@ fun LoginRoute(
             password = password,
             onPasswordChange = { password = it },
             onLoginClick = { viewModel.loginWithEmail(email, password) },
-            isButtonEnabled = isValidEmail(email),
+            isButtonEnabled = isValidEmail(email) && isValidPassword(password),
             navigateToSignUp = { navigateToEmailCheck() }
         )
 
@@ -319,6 +319,10 @@ fun ErrorScreen(
 private fun isValidEmail(email: String): Boolean {
     val emailRegex = "[0-9a-zA-Z]+(.[_a-z0-9-]+)*@(?:\\w+\\.)+\\w+$".toRegex()
     return emailRegex.matches(email)
+}
+
+private fun isValidPassword(password: String): Boolean {
+    return password.length >= 6 && password.isNotEmpty()
 }
 
 @Composable
