@@ -11,4 +11,5 @@ interface AuthRepository {
     suspend fun checkTokenForExpire(): Boolean
     suspend fun sendEmailVerificationCode(): ServiceResult<Unit>
     suspend fun deleteAccount(): ServiceResult<Unit>
+    fun tempSaveUserEmailToSharedPreferences(email: String)
 }

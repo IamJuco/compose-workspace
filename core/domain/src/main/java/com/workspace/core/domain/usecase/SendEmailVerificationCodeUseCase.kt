@@ -15,6 +15,7 @@ class SignUpAndSendVerificationCodeUseCase @Inject constructor(
         if (signUpResult is ServiceResult.Error) {
             return signUpResult
         }
+        authRepository.tempSaveUserEmailToSharedPreferences(email)
 
         return authRepository.sendEmailVerificationCode()
     }
