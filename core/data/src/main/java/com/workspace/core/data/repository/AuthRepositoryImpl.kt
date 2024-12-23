@@ -81,6 +81,13 @@ class AuthRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun sendEmailVerificationCode(): ServiceResult<Unit> {
+        return when (val result = authDataSource.sendEmailVerificationCode()) {
+            is ServiceResult.Success -> ServiceResult.Success(result.data)
+            is ServiceResult.Error -> result
+            else -> ServiceResult.Error(ErrorCode.UNKNOWN_ERROR)
+        }
+    }
 
     private fun saveTokenToSharedPreferences(token: String?) {
         sharedPreferences.edit().putString(Constants.FIREBASE_USER_TOKEN, token).apply()

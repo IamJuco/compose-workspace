@@ -9,4 +9,5 @@ interface AuthRepository {
     suspend fun loginWithGoogle(idToken: String): ServiceResult<User>
     suspend fun signOut()
     suspend fun checkTokenForExpire(): Boolean
+    suspend fun sendEmailVerificationCode(): ServiceResult<Unit>
 }
