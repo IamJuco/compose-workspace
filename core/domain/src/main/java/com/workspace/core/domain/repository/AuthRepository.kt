@@ -10,4 +10,5 @@ interface AuthRepository {
     suspend fun signOut()
     suspend fun checkTokenForExpire(): Boolean
     suspend fun sendEmailVerificationCode(): ServiceResult<Unit>
+    suspend fun deleteAccount(): ServiceResult<Unit>
 }

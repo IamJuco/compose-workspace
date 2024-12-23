@@ -4,7 +4,6 @@ import android.content.SharedPreferences
 import android.util.Log
 import com.workspace.core.data.constants.Constants
 import com.workspace.core.data.datasource.AuthDataSource
-import com.workspace.core.data.mapper.mapToErrorCode
 import com.workspace.core.data.mapper.toDomainModel
 import com.workspace.core.domain.model.ErrorCode
 import com.workspace.core.domain.model.ServiceResult
@@ -83,6 +82,14 @@ class AuthRepositoryImpl @Inject constructor(
 
     override suspend fun sendEmailVerificationCode(): ServiceResult<Unit> {
         return when (val result = authDataSource.sendEmailVerificationCode()) {
+            is ServiceResult.Success -> ServiceResult.Success(result.data)
+            is ServiceResult.Error -> result
+            else -> ServiceResult.Error(ErrorCode.UNKNOWN_ERROR)
+        }
+    }
+
+    override suspend fun deleteAccount(): ServiceResult<Unit> {
+        return when (val result = authDataSource.deleteAccount()) {
             is ServiceResult.Success -> ServiceResult.Success(result.data)
             is ServiceResult.Error -> result
             else -> ServiceResult.Error(ErrorCode.UNKNOWN_ERROR)

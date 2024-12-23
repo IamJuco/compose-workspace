@@ -1,7 +1,5 @@
 package com.workspace.core.data.datasource
 
-import android.util.Log
-import com.google.firebase.auth.ActionCodeSettings
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
@@ -18,6 +16,7 @@ interface AuthDataSource {
     suspend fun signOut()
     suspend fun getIdToken(): ServiceResult<String?>
     suspend fun sendEmailVerificationCode(): ServiceResult<Unit>
+    suspend fun deleteAccount(): ServiceResult<Unit>
 }
 
 class AuthDataSourceImpl @Inject constructor(
@@ -82,6 +81,16 @@ class AuthDataSourceImpl @Inject constructor(
         val user = firebaseAuth.currentUser
         return try {
             user!!.sendEmailVerification().await()
+            ServiceResult.Success(Unit)
+        } catch (e: Exception) {
+            mapToErrorCode(e)
+        }
+    }
+
+    override suspend fun deleteAccount(): ServiceResult<Unit> {
+        val user = firebaseAuth.currentUser
+        return try {
+            user!!.delete().await()
             ServiceResult.Success(Unit)
         } catch (e: Exception) {
             mapToErrorCode(e)

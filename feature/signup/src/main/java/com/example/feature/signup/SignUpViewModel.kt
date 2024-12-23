@@ -4,8 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.workspace.core.domain.model.ServiceResult
 import com.workspace.core.domain.model.UiState
-import com.workspace.core.domain.model.User
-import com.workspace.core.domain.usecase.SignUpWithEmailUseCase
+import com.workspace.core.domain.usecase.DeleteTempAccountUseCase
+import com.workspace.core.domain.usecase.SignUpAndSendVerificationCodeUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -15,21 +15,33 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SignUpViewModel @Inject constructor(
-    private val signUpWithEmailUseCase: SignUpWithEmailUseCase
+    private val signUpAndSendVerificationCodeUseCase: SignUpAndSendVerificationCodeUseCase,
+    private val deleteTempAccountUseCase: DeleteTempAccountUseCase
 ) : ViewModel() {
-    private val _signUpState = MutableStateFlow<UiState<User>>(UiState.Idle)
-    val signUpState: StateFlow<UiState<User>> = _signUpState
+    private val _verificationEmailState = MutableStateFlow<UiState<Unit>>(UiState.Idle)
+    val verificationEmailState: StateFlow<UiState<Unit>> = _verificationEmailState
 
-    fun signUpWithEmail(email: String, password: String) {
+    fun sendVerificationEmail(email: String) {
         viewModelScope.launch {
-            _signUpState.update { UiState.Loading }
-            val result = signUpWithEmailUseCase(email, password)
-            _signUpState.update {
-                when (result) {
-                    is ServiceResult.Success -> UiState.Success(result.data)
-                    is ServiceResult.Error -> UiState.Error(result.errorCode, result.errorMessage)
+            _verificationEmailState.update { UiState.Loading }
+            when (val result = signUpAndSendVerificationCodeUseCase(email)) {
+                is ServiceResult.Success -> _verificationEmailState.update { UiState.Success(result.data) }
+                is ServiceResult.Error -> _verificationEmailState.update {
+                    UiState.Error(
+                        result.errorCode,
+                        result.errorMessage
+                    )
                 }
             }
+        }
+    }
+
+    // Firebase의 한계로 이메일 인증시 임시 회원가입을 무조건 시켜야하므로
+    // 계정 인증 하자마자 계정 삭제
+    fun resetTempSignUp() {
+        _verificationEmailState.update { UiState.Idle }
+        viewModelScope.launch {
+            deleteTempAccountUseCase()
         }
     }
 }
