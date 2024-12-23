@@ -37,6 +37,10 @@ class MainNavigator(
         popUpTo(0) { inclusive = true }
     }
 
+    private val backToLoginOptions = navOptions {
+        popUpTo(RouteModel.Login) { inclusive = false }
+    }
+
     fun navigate(menu: MainMenu) {
         val navOptions = navOptions {
             popUpTo(navController.graph.findStartDestination().id) {
@@ -56,7 +60,7 @@ class MainNavigator(
     fun navigateToHome() = navController.navigateHome(navOptions = allBackStackInclusiveTrue)
     fun navigateToEmailCheck() = navController.navigateToEmailCheck(navOptions = singleTopOptions)
     fun navigateToEmailVerification() = navController.navigateToEmailVerification(navOptions = singleTopOptions)
-    fun navigateToPasswordCheck() = navController.navigateToPasswordCheck(navOptions = singleTopOptions)
+    fun navigateToPasswordCheck() = navController.navigateToPasswordCheck(navOptions = backToLoginOptions)
 
     fun popBackStack() {
         navController.popBackStack()
