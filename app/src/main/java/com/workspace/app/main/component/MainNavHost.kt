@@ -59,7 +59,8 @@ fun MainNavHost(
         emailVerificationNavGraph(
             padding = padding,
             navigateToPasswordCheck = navigator::navigateToPasswordCheck,
-            onShowSnackBar = onShowSnackBar
+            onShowSnackBar = onShowSnackBar,
+            popBackStack = navigator::popBackStack,
         )
 
         passwordCheckNavGraph(

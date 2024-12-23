@@ -38,6 +38,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.feature.signup.SignUpViewModel
@@ -64,13 +65,7 @@ fun EmailCheckRoute(
             isEmailError = !isValidEmail(it)
         },
         popBackStack = popBackStack,
-        onRequestEmailVerification = {
-            if (!isEmailError) {
-                viewModel.sendVerificationEmail(email)
-            } else {
-                onShowSnackBar("유효하지 않은 이메일 형식입니다.")
-            }
-        }
+        onRequestEmailVerification = { viewModel.sendVerificationEmail(email) }
     )
 
     if (verificationEmailState is UiState.Loading) {
@@ -93,7 +88,7 @@ fun EmailCheckRoute(
 
     DisposableEffect(Unit) {
         onDispose {
-            viewModel.resetTempSignUp()
+            viewModel.resetVerificationEmailState()
         }
     }
 }
@@ -135,7 +130,8 @@ fun EmailCheckScreen(
                 Text(
                     text = "이메일로 회원가입",
                     fontWeight = FontWeight.Bold,
-                    color = Color.White
+                    color = Color.Black,
+                    fontSize = 24.sp
                 )
                 Spacer(
                     modifier = Modifier.height(8.dp)
@@ -177,7 +173,7 @@ private fun isValidEmail(email: String): Boolean {
 }
 
 @Composable
-fun BackArrow(onBackClick: () -> Unit, modifier: Modifier = Modifier) {
+private fun BackArrow(onBackClick: () -> Unit, modifier: Modifier = Modifier) {
     Image(
         imageVector = Icons.Default.ArrowBack,
         contentDescription = "뒤로가기",
@@ -189,7 +185,7 @@ fun BackArrow(onBackClick: () -> Unit, modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun LoadingScreen() {
+private fun LoadingScreen() {
     Box(
         modifier = Modifier
             .fillMaxSize()

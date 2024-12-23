@@ -17,6 +17,7 @@ interface AuthDataSource {
     suspend fun getIdToken(): ServiceResult<String?>
     suspend fun sendEmailVerificationCode(): ServiceResult<Unit>
     suspend fun deleteAccount(): ServiceResult<Unit>
+    suspend fun isEmailVerified(): ServiceResult<Boolean>
 }
 
 class AuthDataSourceImpl @Inject constructor(
@@ -82,6 +83,16 @@ class AuthDataSourceImpl @Inject constructor(
         return try {
             user!!.sendEmailVerification().await()
             ServiceResult.Success(Unit)
+        } catch (e: Exception) {
+            mapToErrorCode(e)
+        }
+    }
+
+    override suspend fun isEmailVerified(): ServiceResult<Boolean> {
+        val user = firebaseAuth.currentUser
+        return try {
+            val result = user!!.isEmailVerified
+            ServiceResult.Success(result)
         } catch (e: Exception) {
             mapToErrorCode(e)
         }

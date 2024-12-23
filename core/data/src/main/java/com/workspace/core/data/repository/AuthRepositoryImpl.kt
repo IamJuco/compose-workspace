@@ -96,6 +96,14 @@ class AuthRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun isEmailVerified(): ServiceResult<Boolean> {
+        return when (val result = authDataSource.isEmailVerified()) {
+            is ServiceResult.Success -> ServiceResult.Success(result.data)
+            is ServiceResult.Error -> result
+            else -> ServiceResult.Error(ErrorCode.UNKNOWN_ERROR)
+        }
+    }
+
     override fun tempSaveUserEmailToSharedPreferences(email: String) {
         sharedPreferences.edit().putString(Constants.FIREBASE_TEMP_SAVE_USER_EMAIL, email).apply()
     }

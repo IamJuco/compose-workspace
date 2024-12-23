@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.workspace.core.domain.model.ServiceResult
 import com.workspace.core.domain.model.UiState
 import com.workspace.core.domain.usecase.DeleteTempAccountUseCase
+import com.workspace.core.domain.usecase.IsEmailVerifiedUseCase
 import com.workspace.core.domain.usecase.SignUpAndSendVerificationCodeUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,10 +17,14 @@ import javax.inject.Inject
 @HiltViewModel
 class SignUpViewModel @Inject constructor(
     private val signUpAndSendVerificationCodeUseCase: SignUpAndSendVerificationCodeUseCase,
-    private val deleteTempAccountUseCase: DeleteTempAccountUseCase
+    private val deleteTempAccountUseCase: DeleteTempAccountUseCase,
+    private val isEmailVerifiedUseCase: IsEmailVerifiedUseCase
 ) : ViewModel() {
     private val _verificationEmailState = MutableStateFlow<UiState<Unit>>(UiState.Idle)
     val verificationEmailState: StateFlow<UiState<Unit>> = _verificationEmailState
+
+    private val _isEmailVerifiedState = MutableStateFlow<UiState<Boolean>>(UiState.Idle)
+    val isEmailVerifiedState: StateFlow<UiState<Boolean>> = _isEmailVerifiedState
 
     fun sendVerificationEmail(email: String) {
         viewModelScope.launch {
@@ -36,12 +41,32 @@ class SignUpViewModel @Inject constructor(
         }
     }
 
-    // Firebase의 한계로 이메일 인증시 임시 회원가입을 무조건 시켜야하므로
-    // 계정 인증 하자마자 계정 삭제
-    fun resetTempSignUp() {
-        _verificationEmailState.update { UiState.Idle }
+    fun checkEmailVerified() {
+        viewModelScope.launch {
+            _isEmailVerifiedState.update { UiState.Loading }
+            when (val result = isEmailVerifiedUseCase()) {
+                is ServiceResult.Success -> _isEmailVerifiedState.update { UiState.Success(result.data) }
+                is ServiceResult.Error -> _isEmailVerifiedState.update {
+                    UiState.Error(
+                        result.errorCode,
+                        result.errorMessage
+                    )
+                }
+            }
+        }
+    }
+
+    fun deleteTempAccount() {
         viewModelScope.launch {
             deleteTempAccountUseCase()
         }
+    }
+
+    fun resetVerificationEmailState() {
+        _verificationEmailState.update { UiState.Idle }
+    }
+
+    fun resetEmailVerifiedState() {
+        _isEmailVerifiedState.update { UiState.Idle }
     }
 }

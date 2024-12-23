@@ -15,13 +15,15 @@ fun NavController.navigateToEmailVerification(navOptions: NavOptions) {
 fun NavGraphBuilder.emailVerificationNavGraph(
     padding: PaddingValues,
     navigateToPasswordCheck: () -> Unit,
-    onShowSnackBar: (String) -> Unit
+    onShowSnackBar: (String) -> Unit,
+    popBackStack: () -> Unit
 ) {
     composable<RouteModel.EmailVerification> {
         EmailVerificationRoute(
             padding = padding,
             navigateToPasswordCheck = navigateToPasswordCheck,
-            onShowSnackBar = onShowSnackBar
+            onShowSnackBar = onShowSnackBar,
+            popBackStack = popBackStack
         )
     }
 }
