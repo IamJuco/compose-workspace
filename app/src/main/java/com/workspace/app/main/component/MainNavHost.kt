@@ -8,7 +8,6 @@ import com.example.feature.login.navigation.loginNavGraph
 import com.example.feature.signup.navigation.emailCheckNavGraph
 import com.example.feature.signup.navigation.emailVerificationNavGraph
 import com.example.feature.signup.navigation.passwordCheckNavGraph
-import com.example.feature.signup.navigation.signUpNavGraph
 import com.workspace.app.main.navigation.MainNavigator
 import com.workspace.feature.home.navigation.homeNavGraph
 import com.workspace.feature.mypage.myPageNavGraph
@@ -47,25 +46,26 @@ fun MainNavHost(
             padding = padding,
             onShowSnackBar = onShowSnackBar,
             navigateToHome = navigator::navigateToHome,
-            navigateToSignUp = navigator::navigateToSignUp
-        )
-
-        signUpNavGraph(
-            padding = padding,
-            navigateToLogin = navigator::navigateLogin,
-            onShowSnackBar = onShowSnackBar
+            navigateToEmailCheck = navigator::navigateToEmailCheck
         )
 
         emailCheckNavGraph(
-            padding = padding
+            padding = padding,
+            navigateToEmailVerification = navigator::navigateToEmailVerification,
+            onShowSnackBar = onShowSnackBar,
+            popBackStack = navigator::popBackStack,
         )
 
         emailVerificationNavGraph(
-            padding = padding
+            padding = padding,
+            navigateToPasswordCheck = navigator::navigateToPasswordCheck,
+            onShowSnackBar = onShowSnackBar
         )
 
         passwordCheckNavGraph(
-            padding = padding
+            padding = padding,
+            navigateToLogin = navigator::navigateLogin,
+            onShowSnackBar = onShowSnackBar,
         )
     }
 }

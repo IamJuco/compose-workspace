@@ -32,7 +32,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.input.pointer.pointerInput
@@ -60,7 +59,7 @@ fun LoginRoute(
     viewModel: LoginViewModel = hiltViewModel(),
     onShowSnackBar: (String) -> Unit,
     navigateToHome: () -> Unit = {},
-    navigateToSignUp: () -> Unit = {}
+    navigateToEmailCheck: () -> Unit = {}
 ) {
     val loginState by viewModel.loginWithEmailState.collectAsStateWithLifecycle()
 
@@ -76,7 +75,7 @@ fun LoginRoute(
             onPasswordChange = { password = it },
             onLoginClick = { viewModel.loginWithEmail(email, password) },
             isButtonEnabled = isValidEmail(email),
-            navigateToSignUp = { navigateToSignUp() }
+            navigateToSignUp = { navigateToEmailCheck() }
         )
 
         if (loginState is UiState.Loading) {
@@ -246,7 +245,7 @@ fun LoginFieldCard(
                 .fillMaxWidth(),
             value = email,
             onValueChange = onEmailChange,
-            placeholder = { Text("이메일") },
+            label = { Text("이메일") },
             keyboardOptions = KeyboardOptions.Default.copy(
                 keyboardType = KeyboardType.Email,
                 imeAction = ImeAction.Next
@@ -259,7 +258,7 @@ fun LoginFieldCard(
                 .padding(top = 16.dp),
             value = password,
             onValueChange = onPasswordChange,
-            placeholder = { Text("비밀번호") },
+            label = { Text("비밀번호") },
             keyboardOptions = KeyboardOptions.Default.copy(
                 keyboardType = KeyboardType.Password,
                 imeAction = ImeAction.Done

@@ -14,7 +14,6 @@ import com.example.feature.login.navigation.navigateLogin
 import com.example.feature.signup.navigation.navigateToEmailCheck
 import com.example.feature.signup.navigation.navigateToEmailVerification
 import com.example.feature.signup.navigation.navigateToPasswordCheck
-import com.example.feature.signup.navigation.navigateToSignUp
 import com.workspace.core.domain.navigation.RouteModel
 import com.workspace.feature.home.navigation.navigateHome
 import com.workspace.feature.mypage.navigateMyPage
@@ -54,7 +53,6 @@ class MainNavigator(
 
     fun navigateToDetail(pokemonId: Int) = navController.navigateToDetail(pokemonId = pokemonId, navOptions  = singleTopOptions)
     fun navigateLogin() = navController.navigateLogin(navOptions  = allBackStackInclusiveTrue)
-    fun navigateToSignUp() = navController.navigateToSignUp(navOptions  = singleTopOptions)
     fun navigateToHome() = navController.navigateHome(navOptions = allBackStackInclusiveTrue)
     fun navigateToEmailCheck() = navController.navigateToEmailCheck(navOptions = singleTopOptions)
     fun navigateToEmailVerification() = navController.navigateToEmailVerification(navOptions = singleTopOptions)

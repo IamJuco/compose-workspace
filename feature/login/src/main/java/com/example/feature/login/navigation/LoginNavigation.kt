@@ -16,14 +16,14 @@ fun NavGraphBuilder.loginNavGraph(
     padding: PaddingValues,
     onShowSnackBar: (String) -> Unit,
     navigateToHome: () -> Unit,
-    navigateToSignUp: () -> Unit
+    navigateToEmailCheck: () -> Unit
 ) {
     composable<RouteModel.Login> {
         LoginRoute(
             padding = padding,
             onShowSnackBar = onShowSnackBar,
             navigateToHome = navigateToHome,
-            navigateToSignUp = navigateToSignUp
+            navigateToEmailCheck = navigateToEmailCheck
         )
     }
 }

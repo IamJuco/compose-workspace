@@ -5,17 +5,16 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -26,15 +25,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.util.unpackFloat1
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.workspace.core.domain.model.ServiceResult
+import com.example.feature.signup.screen.EmailCheckScreen
 import com.workspace.core.domain.model.UiState
 
+/**
 @Composable
 fun SignUpRoute(
     padding: PaddingValues = PaddingValues(),
@@ -44,7 +45,6 @@ fun SignUpRoute(
 ) {
     val signUpState by viewModel.signUpState.collectAsStateWithLifecycle()
 
-
     val email = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
     val confirmPassword = remember { mutableStateOf("") }
@@ -53,22 +53,9 @@ fun SignUpRoute(
         LoadingScreen()
     }
 
-    // UI 렌더링
-    SignUpScreen(
+    EmailCheckScreen(
         padding = padding,
-        email = email.value,
-        onEmailChange = { email.value = it },
-        password = password.value,
-        onPasswordChange = { password.value = it },
-        confirmPassword = confirmPassword.value,
-        onConfirmPasswordChange = { confirmPassword.value = it },
-        onSignUpClick = {
-            if (password.value == confirmPassword.value) {
-                viewModel.signUpWithEmail(email.value, password.value)
-            } else {
-                // 비밀번호 불일치 처리
-            }
-        },
+
     )
 
     LaunchedEffect(signUpState) {
@@ -98,6 +85,10 @@ fun SignUpScreen(
     confirmPassword: String,
     onConfirmPasswordChange: (String) -> Unit,
     onSignUpClick: () -> Unit,
+    isEmailError: Boolean,
+    isPasswordError: Boolean,
+    isConfirmPasswordError: Boolean,
+    isButtonEnabled: Boolean
 ) {
     Column(
         modifier = Modifier
@@ -111,34 +102,51 @@ fun SignUpScreen(
             modifier = Modifier.fillMaxWidth(),
             value = email,
             onValueChange = onEmailChange,
-            label = { Text("이메일") }
+            label = { Text("이메일") },
+            isError = isEmailError,
+            keyboardOptions = KeyboardOptions.Default.copy(
+                keyboardType = KeyboardType.Email,
+                imeAction = ImeAction.Next
+            )
         )
-        Spacer(modifier = Modifier.height(8.dp))
 
         OutlinedTextField(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 8.dp),
             value = password,
             onValueChange = onPasswordChange,
             label = { Text("비밀번호") },
-            visualTransformation = PasswordVisualTransformation()
+            visualTransformation = PasswordVisualTransformation(),
+            isError = isPasswordError,
+            keyboardOptions = KeyboardOptions.Default.copy(
+                keyboardType = KeyboardType.Password,
+                imeAction = ImeAction.Next
+            )
         )
-        Spacer(modifier = Modifier.height(8.dp))
 
         OutlinedTextField(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 8.dp),
             value = confirmPassword,
             onValueChange = onConfirmPasswordChange,
             label = { Text("비밀번호 확인") },
-            visualTransformation = PasswordVisualTransformation()
+            visualTransformation = PasswordVisualTransformation(),
+            isError = isConfirmPasswordError,
+            keyboardOptions = KeyboardOptions.Default.copy(
+                keyboardType = KeyboardType.Password,
+                imeAction = ImeAction.Done
+            ),
         )
-        Spacer(modifier = Modifier.height(16.dp))
 
         Button(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 24.dp)
+                .padding(top = 48.dp)
                 .height(64.dp),
             colors = ButtonDefaults.buttonColors(containerColor = Color.Magenta),
+            enabled = isButtonEnabled,
             onClick = onSignUpClick
         ) {
             Text(
@@ -170,3 +178,15 @@ fun LoadingScreen() {
         )
     }
 }
+
+private fun isValidEmail(email: String): Boolean {
+    val emailRegex = "[0-9a-zA-Z]+(.[_a-z0-9-]+)*@(?:\\w+\\.)+\\w+$".toRegex()
+    return emailRegex.matches(email)
+}
+
+private fun isPasswordComplex(password: String): Boolean {
+    val passwordRegex = "^(?=.*[a-zA-Z]).{8,}$".toRegex()
+    return passwordRegex.matches(password)
+}
+
+ */
