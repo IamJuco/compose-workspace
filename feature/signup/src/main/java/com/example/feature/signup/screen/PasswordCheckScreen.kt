@@ -61,7 +61,6 @@ fun PasswordCheckRoute(
     var password by remember { mutableStateOf("") }
     var confirmPassword by remember { mutableStateOf("") }
     var isPasswordError by remember { mutableStateOf(false) }
-    var isConfirmPasswordError by remember { mutableStateOf(false) }
 
     PasswordCheckScreen(
         padding = padding,
@@ -75,7 +74,6 @@ fun PasswordCheckRoute(
         onConfirmPasswordChange = { confirmPassword = it },
         onSignUp = { viewModel.signUpWithEmail(password) },
         isPasswordError = isPasswordError,
-        isConfirmPasswordError = isConfirmPasswordError && isPasswordError
     )
 
     if (signUpState is UiState.Loading) {
@@ -107,8 +105,6 @@ fun PasswordCheckScreen(
     onConfirmPasswordChange: (String) -> Unit,
     onSignUp: () -> Unit,
     isPasswordError: Boolean = false,
-    isConfirmPasswordError: Boolean = false
-
 ) {
     var isPasswordVisible by remember { mutableStateOf(false) }
 
@@ -195,16 +191,6 @@ fun PasswordCheckScreen(
                         }
                     }
                 )
-
-//                if (isConfirmPasswordError) {
-//                    Text(
-//                        text = "비밀번호를 확인해 주세요.",
-//                        color = Color.Red,
-//                        fontSize = 12.sp,
-//                        modifier = Modifier.padding(top = 4.dp),
-//                        textDecoration = TextDecoration.Underline
-//                    )
-//                }
 
                 Spacer(modifier = Modifier.height(24.dp))
 
