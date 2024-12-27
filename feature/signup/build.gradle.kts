@@ -3,11 +3,11 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     // Kotlin 2.0.0 버전부터, 루트와 모듈에 이 플러그인 추가시켜야함
     alias(libs.plugins.compose.compiler)
-    // Hilt
-    id("com.google.dagger.hilt.android")
-    id("com.google.devtools.ksp")
+    //Hilt
+    alias(libs.plugins.hilt)
+    alias(libs.plugins.ksp)
     // Firebase
-    id("com.google.gms.google-services")
+    alias(libs.plugins.firebase)
 }
 
 android {

@@ -1,11 +1,11 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.jetbrains.kotlin.android)
-    // Hilt
-    id("com.google.dagger.hilt.android")
-    id("com.google.devtools.ksp")
+    //Hilt
+    alias(libs.plugins.hilt)
+    alias(libs.plugins.ksp)
     // Firebase
-    id("com.google.gms.google-services")
+    alias(libs.plugins.firebase)
 }
 
 android {
