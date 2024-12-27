@@ -10,4 +10,5 @@ plugins {
     alias(libs.plugins.ksp) apply false
     // Firebase
     alias(libs.plugins.firebase) apply false
+    alias(libs.plugins.jetbrains.kotlin.jvm) apply false
 }
