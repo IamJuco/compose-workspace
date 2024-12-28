@@ -117,7 +117,7 @@ compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "
 jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrainsKotlinJvm" }
 
 # Custom Plugin
-workspace-android-application = { id = "workspace.android.application", version = "unspecified"}
+workspace-android-application = { id = "workspace.android.application", version = "agp"}
 
 [bundles]
 compose = [
