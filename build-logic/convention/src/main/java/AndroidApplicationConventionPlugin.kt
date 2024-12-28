@@ -15,6 +15,7 @@ class AndroidApplicationConventionPlugin: Plugin<Project> {
 
             extensions.configure<ApplicationExtension> {
                 defaultConfig {
+                    // toml의 version에 설정해둔 이름을 그대로 가져와야함
                     applicationId = libs.findVersion("projectApplicationId").get().toString()
                     targetSdk = libs.findVersion("projectTargetSdkVersion").get().toString().toInt()
                     versionCode = libs.findVersion("projectVersionCode").get().toString().toInt()

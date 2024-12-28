@@ -8,18 +8,20 @@ plugins {
     alias(libs.plugins.ksp)
     // Firebase
     alias(libs.plugins.firebase)
+    // Custom Plugin
+    alias(libs.plugins.workspace.android.application)
 }
 
 android {
     namespace = "com.workspace.app"
-    compileSdk = 35
+//    compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.workspace.main"
-        minSdk = 24
-        targetSdk = 35
-        versionCode = 1
-        versionName = "1.0"
+//        applicationId = "com.workspace.main"
+//        minSdk = 24
+//        targetSdk = 35
+//        versionCode = 1
+//        versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -47,13 +49,13 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"
     }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
-    }
-    kotlinOptions {
-        jvmTarget = "1.8"
-    }
+//    compileOptions {
+//        sourceCompatibility = JavaVersion.VERSION_1_8
+//        targetCompatibility = JavaVersion.VERSION_1_8
+//    }
+//    kotlinOptions {
+//        jvmTarget = "1.8"
+//    }
 }
 
 dependencies {

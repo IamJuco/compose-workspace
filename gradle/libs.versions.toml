@@ -1,6 +1,6 @@
 [versions]
 # Project versions
-projectApplicationId = "com.workspace"
+projectApplicationId = "com.workspace.main"
 projectVersionName = "1.0"
 projectVersionCode = "1"
 projectMinSdkVersion = "24"
@@ -28,8 +28,9 @@ okhttp = "4.12.0"
 gson = "2.11.0"
 kotlinxSerialization = "1.7.3"
 firebase = "4.4.2"
-ksp = "2.0.20-1.0.25"
+ksp =  "2.0.20-1.0.25"
 jetbrainsKotlinJvm = "2.0.20"
+desugar_jdk_libs = "2.1.4"
 
 [libraries]
 
@@ -85,11 +86,15 @@ gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
 # Serialized
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinxSerialization" }
 
+# Desugaring
+desugar-jdk-libs = { group = "com.android.tools", name = "desugar_jdk_libs", version.ref = "desugar_jdk_libs" }
+
 # test, Gradle
+# ksp는 gradle이 maven 의존성을 찾기위해 name을 저렇게 해야함
 android-gradle-plugin = { group = "com.android.tools.build", name = "gradle", version.ref = "agp" }
 kotlin-gradle-plugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
-ksp-gradle-plugin = { group = "com.google.devtools.ksp", name = "ksp-gradle-plugin", version.ref = "ksp" }
-hilt-gradle-plugin = { group = "com.google.dagger.hilt.android", name = "hilt-gradle-plugin", version.ref = "hilt" }
+ksp-gradle-plugin = { group = "com.google.devtools.ksp", name = "com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
+hilt-gradle-plugin = { group = "com.google.dagger", name = "hilt-android-gradle-plugin", version.ref = "hilt" }
 
 [plugins]
 android-library = { id = "com.android.library", version.ref = "agp" }
@@ -108,7 +113,11 @@ firebase = { id = "com.google.gms.google-services", version.ref = "firebase" }
 
 # Kotlin 2.0.0 버전부터, 루트와 모듈에 이 플러그인 추가시켜야함
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+
 jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrainsKotlinJvm" }
+
+# Custom Plugin
+workspace-android-application = { id = "workspace.android.application", version = "unspecified"}
 
 [bundles]
 compose = [
