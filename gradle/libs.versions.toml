@@ -121,6 +121,7 @@ jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrai
 workspace-android-application = { id = "workspace.android.application", version = "agp"}
 workspace-android-application-compose = { id = "workspace.android.application.compose", version = "agp"}
 workspace-android-library = { id = "workspace.android.library", version = "agp" }
+workspace-android-library-compose = { id = "workspace.android.library.compose", version = "agp" }
 
 [bundles]
 compose = [
