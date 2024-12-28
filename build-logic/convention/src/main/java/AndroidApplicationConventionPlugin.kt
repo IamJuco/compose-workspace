@@ -1,4 +1,6 @@
 import com.android.build.api.dsl.ApplicationExtension
+import com.workspace.convention.ExtensionType
+import com.workspace.convention.configureBuildTypes
 import com.workspace.convention.configureKotlinAndroid
 import com.workspace.convention.libs
 import org.gradle.api.Plugin
@@ -23,6 +25,12 @@ class AndroidApplicationConventionPlugin: Plugin<Project> {
                 }
 
                 configureKotlinAndroid(this)
+
+                // 초반 빌드 타입, 앱 모듈 설정
+                configureBuildTypes(
+                    commonExtension = this,
+                    extensionType = ExtensionType.APPLICATION
+                )
             }
         }
     }
