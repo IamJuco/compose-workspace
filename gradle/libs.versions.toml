@@ -6,6 +6,7 @@ projectVersionCode = "1"
 projectMinSdkVersion = "24"
 projectTargetSdkVersion = "35"
 projectCompileSdkVersion = "35"
+composeCompiler = "1.5.1"
 
 agp = "8.7.2"
 coil = "3.0.4"
@@ -118,6 +119,8 @@ jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrai
 
 # Custom Plugin
 workspace-android-application = { id = "workspace.android.application", version = "agp"}
+workspace-android-application-compose = { id = "workspace.android.application.compose", version = "agp"}
+workspace-android-library = { id = "workspace.android.library", version = "agp" }
 
 [bundles]
 compose = [
