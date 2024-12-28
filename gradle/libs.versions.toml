@@ -1,4 +1,12 @@
 [versions]
+# Project versions
+projectApplicationId = "com.workspace"
+projectVersionName = "1.0"
+projectVersionCode = "1"
+projectMinSdkVersion = "24"
+projectTargetSdkVersion = "35"
+projectCompileSdkVersion = "35"
+
 agp = "8.7.2"
 coil = "3.0.4"
 hilt = "2.53"
