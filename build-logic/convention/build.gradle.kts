@@ -17,5 +17,15 @@ gradlePlugin {
             id = "workspace.android.application" // toml에 설정된 plugin id와 동일해야함
             implementationClass = "AndroidApplicationConventionPlugin" // Plugin Class 이름을 그대로 가져옴
         }
+
+        register("androidApplicationCompose") {
+            id = "workspace.android.application.compose" // toml에 설정된 plugin id와 동일해야함
+            implementationClass = "AndroidApplicationComposeConventionPlugin" // Plugin Class 이름을 그대로 가져옴
+        }
+
+        register("AndroidLibraryConventionPlugin") {
+            id = "workspace.android.library" // toml에 설정된 plugin id와 동일해야함
+            implementationClass = "AndroidLibraryConventionPlugin" // Plugin Class 이름을 그대로 가져옴
+        }
     }
 }
