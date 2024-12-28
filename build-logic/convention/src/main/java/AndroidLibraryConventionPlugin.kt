@@ -6,8 +6,8 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
 
-// Compose와 같은 화면이 필요없는 모듈 Plugin
-class AndroidLibraryConventionPlugin: Plugin<Project> {
+// Compose가 필요없는 모듈 Plugin ( Data Module 등 )
+class AndroidLibraryConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         target.run {
             pluginManager.run {
