@@ -122,15 +122,23 @@ workspace-android-application = { id = "workspace.android.application", version 
 workspace-android-application-compose = { id = "workspace.android.application.compose", version = "agp"}
 workspace-android-library = { id = "workspace.android.library", version = "agp" }
 workspace-android-library-compose = { id = "workspace.android.library.compose", version = "agp" }
+workspace-android-presentation-ui = { id = "workspace.android.presentation.ui", version = "agp" }
 
 [bundles]
 compose = [
     "androidx-compose-bom",
+    "androidx-lifecycle-runtime-ktx",
+    "androidx-core-ktx",
+    "androidx-activity-compose",
+    "androidx-material3",
     "androidx-ui",
     "androidx-ui-graphics",
+    "androidx-ui-tooling-preview",
+]
+
+compose-dubug = [
     "androidx-ui-tooling",
     "androidx-ui-tooling-preview",
-    "androidx-material3"
 ]
 
 networking = [
