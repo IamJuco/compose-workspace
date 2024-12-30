@@ -32,5 +32,10 @@ gradlePlugin {
             id = "workspace.android.library.compose" // toml에 설정된 plugin id와 동일해야함
             implementationClass = "AndroidLibraryComposeConventionPlugin" // Plugin Class 이름을 그대로 가져옴
         }
+
+        register("AndroidPresentationUi") {
+            id = "workspace.android.presentation.ui" // toml에 설정된 plugin id와 동일해야함
+            implementationClass = "AndroidPresentationUIConventionPlugin" // Plugin Class 이름을 그대로 가져옴
+        }
     }
 }

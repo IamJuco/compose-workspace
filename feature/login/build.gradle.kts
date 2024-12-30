@@ -8,6 +8,7 @@ plugins {
     alias(libs.plugins.ksp)
     // Firebase
     alias(libs.plugins.firebase)
+    alias(libs.plugins.workspace.android.presentation.ui)
 }
 
 android {
