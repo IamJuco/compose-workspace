@@ -1,5 +1,6 @@
 package com.workspace.core.data.di
 
+import com.workspace.core.data.BuildConfig
 import com.workspace.core.data.api.PokeService
 import com.workspace.core.data.constants.Constants
 import dagger.Module
@@ -45,7 +46,7 @@ object NetworkModule {
         okHttpClient: OkHttpClient
     ): PokeService {
         return retrofitBuilder
-            .baseUrl(Constants.POKE_API_BASE_URL)
+            .baseUrl(BuildConfig.BASE_URL)
             .client(okHttpClient)
             .build()
             .create(PokeService::class.java)

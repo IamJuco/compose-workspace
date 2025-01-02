@@ -1,3 +1,6 @@
+import java.io.FileInputStream
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.jetbrains.kotlin.android)
@@ -8,6 +11,16 @@ plugins {
     alias(libs.plugins.firebase)
 }
 
+// local.properties의 값 읽는 로직
+val localProperties = Properties()
+val localFile = rootProject.file("local.properties")
+if (localFile.exists()) {
+    localProperties.load(FileInputStream(localFile))
+}
+
+// local.properties의 값 가져오는 로직
+val baseUrl = localProperties.getProperty("BASE_URL", "https://defaultserver.com/api")
+
 android {
     namespace = "com.workspace.core.data"
     compileSdk = 35
@@ -17,6 +30,8 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
+        // local.properties의 값 사용을 위한 로직
+        buildConfigField("String", "BASE_URL", "\"$baseUrl\"")
     }
 
     buildTypes {
@@ -27,6 +42,9 @@ android {
                 "proguard-rules.pro"
             )
         }
+    }
+    buildFeatures {
+        buildConfig = true
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
