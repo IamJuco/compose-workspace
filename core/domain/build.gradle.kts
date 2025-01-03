@@ -56,6 +56,10 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:33.7.0"))
     implementation("com.google.firebase:firebase-auth-ktx")
 
+    // Security-Crypto
+    implementation(libs.androidx.security.crypto)
+    implementation(libs.androidx.security.crypto.ktx)
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
