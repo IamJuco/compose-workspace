@@ -16,7 +16,11 @@ import androidx.compose.ui.unit.sp
 
 @Composable
 fun PokemonStatusCard(label: String, value: Float, unit: String) {
-    val formattedValue = if (label == "몸무게") value / 10 else value
+    val formattedValue = when (label) {
+        "키" -> value / 10
+        "몸무게" -> value / 10
+        else -> value
+    }
 
     Column(
         modifier = Modifier.padding(8.dp),

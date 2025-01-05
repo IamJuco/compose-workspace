@@ -71,7 +71,7 @@ class AuthDataSourceImpl @Inject constructor(
         return try {
             // true = 항상 새로운 토크 반환
             // false = 캐시된 토큰만 반환 ( 기본 토큰 만료 되면 새로운 토큰 반환 )
-            val token = firebaseAuth.currentUser?.getIdToken(true)?.await()?.token
+            val token = firebaseAuth.currentUser?.getIdToken(false)?.await()?.token
             ServiceResult.Success(token)
         } catch (e: Exception) {
             mapToErrorCode(e)
