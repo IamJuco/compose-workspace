@@ -52,33 +52,30 @@ class AuthRepositoryImpl @Inject constructor(
     }
 
     override suspend fun checkTokenForExpire(): Boolean {
-        //TODO 로직 수정할것 ( error에 대한 대응할것 )
         val savedToken = getTokenFromSharedPreferences()
         val currentUserResult = authDataSource.getCurrentUser()
 
-        return if (savedToken != null && currentUserResult is ServiceResult.Success && currentUserResult.data != null) {
-            try {
-                val refreshedTokenResult = authDataSource.getIdToken()
-                if (refreshedTokenResult is ServiceResult.Success) {
-                    val refreshedToken = refreshedTokenResult.data
-                    if (refreshedToken == savedToken) {
-                        true
-                    } else {
-                        signOut()
-                        false
-                    }
-                } else {
+        // 유효하지 않은 토큰이나 사용자 정보가 없을때 임시 false및 signOut처리
+        if (savedToken == null || currentUserResult !is ServiceResult.Success || currentUserResult.data == null) {
+            signOut()
+            return false
+        }
+
+        return when (val refreshedTokenResult = authDataSource.getIdToken()) {
+            is ServiceResult.Success -> {
+                val refreshedToken = refreshedTokenResult.data
+                if (refreshedToken == savedToken) true else {
                     signOut()
                     false
                 }
-            } catch (e: Exception) {
+            }
+            is ServiceResult.Error -> {
                 signOut()
                 false
             }
-        } else {
-            false
         }
     }
+
 
     override suspend fun sendEmailVerificationCode(): ServiceResult<Unit> {
         return when (val result = authDataSource.sendEmailVerificationCode()) {
