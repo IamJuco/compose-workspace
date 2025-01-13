@@ -23,6 +23,7 @@ firebase = "4.4.2"
 ksp = "2.0.20-1.0.25"
 securityCrypto = "1.1.0-alpha06"
 securityCryptoKtx = "1.1.0-alpha06"
+datastorePreferences = "1.1.1"
 
 [libraries]
 
@@ -81,6 +82,8 @@ kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-
 # Security-Crypto
 androidx-security-crypto = { module = "androidx.security:security-crypto", version.ref = "securityCrypto" }
 androidx-security-crypto-ktx = { group = "androidx.security", name = "security-crypto-ktx", version.ref = "securityCryptoKtx" }
+
+datastore = { module = "androidx.datastore:datastore-preferences", version.ref = "datastorePreferences" }
 
 [plugins]
 android-library = { id = "com.android.library", version.ref = "agp" }

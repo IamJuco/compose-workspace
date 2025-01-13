@@ -75,6 +75,9 @@ dependencies {
     implementation("com.google.firebase:firebase-auth-ktx")
     implementation ("com.google.firebase:firebase-firestore-ktx")
 
+    // DataStore
+    implementation(libs.datastore)
+
     // Security-Crypto
     implementation(libs.androidx.security.crypto)
     implementation(libs.androidx.security.crypto.ktx)
