@@ -12,6 +12,9 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
+// SharedPreferences -> DataStore로 대체
+// ANR 방지및 비동기 처리를 위해 Token 관리는 DataStore로 대체
+/**
 @Module
 @InstallIn(SingletonComponent::class)
 object SharedPreferencesModule {
@@ -37,3 +40,5 @@ object SharedPreferencesModule {
         return sharedPreferences.edit()
     }
 }
+
+ */
