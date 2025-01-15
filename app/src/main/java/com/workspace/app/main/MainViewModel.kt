@@ -1,10 +1,9 @@
 package com.workspace.app.main
 
-import android.util.Log
-import androidx.compose.runtime.MutableState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.workspace.core.domain.usecase.CheckUserAccessTokenUseCase
+import com.workspace.core.domain.model.ServiceResult
+import com.workspace.core.domain.usecase.CheckUserLoggedInUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -15,35 +14,40 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val checkUserAccessTokenUseCase: CheckUserAccessTokenUseCase
+    private val checkUserLoggedInUseCase: CheckUserLoggedInUseCase
 ) : ViewModel() {
 
     private val _initialScreenState = MutableStateFlow<ScreenState>(ScreenState.Loading)
     val initialScreenState: StateFlow<ScreenState> = _initialScreenState
 
-    private val _userAccessTokenState = MutableStateFlow(false)
-    val userAccessTokenState = _userAccessTokenState.asStateFlow()
+    private val _loginState = MutableStateFlow(false)
+    val loginState = _loginState.asStateFlow()
 
     init {
-        checkUserAccessToken()
-        updateUserAccessToken()
+        initScreen()
     }
 
-    private fun checkUserAccessToken() {
+    private fun initScreen() {
         viewModelScope.launch {
-            val isTokenValid = checkUserAccessTokenUseCase()
-            _initialScreenState.value = if (isTokenValid) {
-                ScreenState.Home
-            } else {
-                ScreenState.Login
+            val result = checkUserLoggedInUseCase()
+            _initialScreenState.update {
+                when (result) {
+                    is ServiceResult.Success -> {
+                        if (result.data) {
+                            _loginState.update { true }
+                            ScreenState.Home
+                        } else {
+                            _loginState.update { false }
+                            ScreenState.Login
+                        }
+                    }
+
+                    is ServiceResult.Error -> {
+                        _loginState.update { false }
+                        ScreenState.Login
+                    }
+                }
             }
-        }
-    }
-
-    private fun updateUserAccessToken() {
-        viewModelScope.launch {
-            _userAccessTokenState.update { checkUserAccessTokenUseCase() }
-            Log.d("0526ViewModel", _userAccessTokenState.value.toString())
         }
     }
 

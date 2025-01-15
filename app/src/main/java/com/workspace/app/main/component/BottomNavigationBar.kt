@@ -27,11 +27,7 @@ fun BottomNavigationBar(
                 label = { Text(menu.contentDescription) },
                 selected = menu == currentMenu,
                 onClick = {
-                    if (hasToken) {
-                        onMenuSelected(menu)
-                    } else {
-                        onShowLoginSnackBar()
-                    }
+                    onMenuSelected(menu)
                 }
             )
         }

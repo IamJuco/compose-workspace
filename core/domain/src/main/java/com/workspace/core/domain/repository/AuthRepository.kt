@@ -7,8 +7,8 @@ interface AuthRepository {
     suspend fun loginWithEmail(email: String, password: String): ServiceResult<User>
     suspend fun signUpWithEmail(email: String, password: String): ServiceResult<User>
     suspend fun loginWithGoogle(idToken: String): ServiceResult<User>
+    suspend fun checkUserLoggedIn(): ServiceResult<Boolean>
     suspend fun signOut()
-    suspend fun checkTokenForExpire(): Boolean
     suspend fun sendEmailVerificationCode(): ServiceResult<Unit>
     suspend fun deleteAccount(): ServiceResult<Unit>
     suspend fun isEmailVerified(): ServiceResult<Boolean>

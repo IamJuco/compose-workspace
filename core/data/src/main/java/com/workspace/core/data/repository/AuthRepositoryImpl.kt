@@ -1,30 +1,27 @@
 package com.workspace.core.data.repository
 
-import android.content.SharedPreferences
-import android.util.Log
-import com.workspace.core.data.constants.Constants
 import com.workspace.core.data.datasource.AuthDataSource
+import com.workspace.core.data.local.AuthManager
 import com.workspace.core.data.mapper.toDomainModel
 import com.workspace.core.domain.model.ErrorCode
 import com.workspace.core.domain.model.ServiceResult
 import com.workspace.core.domain.model.User
 import com.workspace.core.domain.repository.AuthRepository
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 class AuthRepositoryImpl @Inject constructor(
     private val authDataSource: AuthDataSource,
-    private val sharedPreferences: SharedPreferences
+    private val authManager: AuthManager
 ) : AuthRepository {
 
     override suspend fun loginWithEmail(email: String, password: String): ServiceResult<User> {
         return when (val result = authDataSource.loginWithEmail(email, password)) {
-            is ServiceResult.Success -> {
-                val tokenResult = authDataSource.getIdToken()
-                val token = (tokenResult as? ServiceResult.Success)?.data
-                Log.d("0526Token", tokenResult.toString())
-                saveTokenToSharedPreferences(token)
-                ServiceResult.Success(result.data.toDomainModel())
-            }
+            is ServiceResult.Success -> ServiceResult.Success(result.data.toDomainModel())
             is ServiceResult.Error -> result
             else -> ServiceResult.Error(ErrorCode.UNKNOWN_ERROR)
         }
@@ -46,36 +43,18 @@ class AuthRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun checkUserLoggedIn(): ServiceResult<Boolean> {
+        return when (val result = authDataSource.getCurrentUser()) {
+            is ServiceResult.Success -> ServiceResult.Success(result.data)
+            is ServiceResult.Error -> result
+            else -> ServiceResult.Error(ErrorCode.UNKNOWN_ERROR)
+        }
+    }
+
     override suspend fun signOut() {
         authDataSource.signOut()
-        sharedPreferences.edit().remove(Constants.FIREBASE_USER_TOKEN).apply()
+        authManager.clearData()
     }
-
-    override suspend fun checkTokenForExpire(): Boolean {
-        val savedToken = getTokenFromSharedPreferences()
-        val currentUserResult = authDataSource.getCurrentUser()
-
-        // 유효하지 않은 토큰이나 사용자 정보가 없을때 임시 false및 signOut처리
-        if (savedToken == null || currentUserResult !is ServiceResult.Success || currentUserResult.data == null) {
-            signOut()
-            return false
-        }
-
-        return when (val refreshedTokenResult = authDataSource.getIdToken()) {
-            is ServiceResult.Success -> {
-                val refreshedToken = refreshedTokenResult.data
-                if (refreshedToken == savedToken) true else {
-                    signOut()
-                    false
-                }
-            }
-            is ServiceResult.Error -> {
-                signOut()
-                false
-            }
-        }
-    }
-
 
     override suspend fun sendEmailVerificationCode(): ServiceResult<Unit> {
         return when (val result = authDataSource.sendEmailVerificationCode()) {
@@ -102,19 +81,18 @@ class AuthRepositoryImpl @Inject constructor(
     }
 
     override fun tempSaveUserEmailToSharedPreferences(email: String) {
-        sharedPreferences.edit().putString(Constants.FIREBASE_TEMP_SAVE_USER_EMAIL, email).apply()
+        CoroutineScope(Dispatchers.IO).launch {
+            authManager.saveTempUserEmail(email)
+        }
     }
 
     override fun tempGetUserEmailFromSharedPreferences(): String? {
-        return sharedPreferences.getString(Constants.FIREBASE_TEMP_SAVE_USER_EMAIL, null)
+        return runBlocking {
+            authManager.tempUserEmail.firstOrNull()
+        }
     }
 
-    private fun saveTokenToSharedPreferences(token: String?) {
-        sharedPreferences.edit().putString(Constants.FIREBASE_USER_TOKEN, token).apply()
-    }
-
-    private fun getTokenFromSharedPreferences(): String? {
-        val token = sharedPreferences.getString(Constants.FIREBASE_USER_TOKEN, null)
-        return token
+    private suspend fun saveTokenToSharedPreferences(token: String) {
+        authManager.saveIdToken(token)
     }
 }

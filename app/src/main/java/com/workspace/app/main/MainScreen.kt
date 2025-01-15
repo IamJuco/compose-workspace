@@ -40,7 +40,7 @@ fun MainScreen(
     val snackBarHostState = remember { SnackbarHostState() }
 
     val initialScreenState by viewModel.initialScreenState.collectAsStateWithLifecycle()
-    val hasToken by viewModel.userAccessTokenState.collectAsStateWithLifecycle()
+    val hasToken by viewModel.loginState.collectAsStateWithLifecycle()
     Log.d("0526Token", hasToken.toString())
 
     val onShowLoginSnackBar: () -> Unit = {

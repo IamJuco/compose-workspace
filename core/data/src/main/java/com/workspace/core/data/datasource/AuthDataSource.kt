@@ -12,7 +12,7 @@ interface AuthDataSource {
     suspend fun loginWithEmail(email: String, password: String): ServiceResult<FirebaseUser>
     suspend fun signUpWithEmail(email: String, password: String): ServiceResult<FirebaseUser>
     suspend fun loginWithGoogle(idToken: String): ServiceResult<FirebaseUser>
-    suspend fun getCurrentUser(): ServiceResult<FirebaseUser?>
+    suspend fun getCurrentUser(): ServiceResult<Boolean>
     suspend fun signOut()
     suspend fun getIdToken(): ServiceResult<String?>
     suspend fun sendEmailVerificationCode(): ServiceResult<Unit>
@@ -58,8 +58,12 @@ class AuthDataSourceImpl @Inject constructor(
         }
     }
 
-    override suspend fun getCurrentUser(): ServiceResult<FirebaseUser?> {
-        val user = firebaseAuth.currentUser
+    //TODO: 로그인이 되어있는 상태에서 계정을 삭제시키고 앱을 껏다켜도 다시 로그인이 되어있음
+    // 따라서 reload를 추가시켰지만 앱이 튕김
+    // dataSource에 reload용 하나만들고 예외처리 후 RepositoryImpl에서 reload 처리도 하자.
+    override suspend fun getCurrentUser(): ServiceResult<Boolean> {
+        firebaseAuth.currentUser?.reload()?.await()
+        val user = firebaseAuth.currentUser != null
         return try {
             ServiceResult.Success(user)
         } catch (e: Exception) {
