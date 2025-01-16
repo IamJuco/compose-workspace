@@ -1,12 +1,8 @@
 package com.workspace.app.main
 
 import android.util.Log
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Scaffold
@@ -86,6 +82,7 @@ fun MainScreen(
             )
         },
         bottomBar = {
+            // Crossfade = 자연스럽게 화면 전환 애니메이션을 줌 ( navigationBar 가 바로 사라짐 )
             navigator.currentMenu?.contentDescription?.let {
                 Crossfade(targetState = navigator.currentMenu, label = it) { currentMenu ->
                     if (currentMenu != null) {
