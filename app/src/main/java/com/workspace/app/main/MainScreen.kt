@@ -2,6 +2,7 @@ package com.workspace.app.main
 
 import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.Crossfade
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Box
@@ -85,16 +86,17 @@ fun MainScreen(
             )
         },
         bottomBar = {
-            // if로 설정하면 Bar가 없어졌다 사라지는 모션으로 보여서 visible로 대체
-            AnimatedVisibility(
-                visible = navigator.currentMenu != null
-            ) {
-                BottomNavigationBar(
-                    currentMenu = navigator.currentMenu,
-                    onMenuSelected = { navigator.navigate(it) },
-                    onShowLoginSnackBar = onShowLoginSnackBar,
-                    hasToken = hasToken
-                )
+            navigator.currentMenu?.contentDescription?.let {
+                Crossfade(targetState = navigator.currentMenu, label = it) { currentMenu ->
+                    if (currentMenu != null) {
+                        BottomNavigationBar(
+                            currentMenu = currentMenu,
+                            onMenuSelected = { navigator.navigate(it) },
+                            onShowLoginSnackBar = onShowLoginSnackBar,
+                            hasToken = hasToken
+                        )
+                    }
+                }
             }
         }
     )
