@@ -44,9 +44,15 @@ class AuthRepositoryImpl @Inject constructor(
     }
 
     override suspend fun checkUserLoggedIn(): ServiceResult<Boolean> {
-        return when (val result = authDataSource.getCurrentUser()) {
-            is ServiceResult.Success -> ServiceResult.Success(result.data)
-            is ServiceResult.Error -> result
+        return when (val reloadResult = authDataSource.reloadCurrentUser()) {
+            is ServiceResult.Success -> {
+                when (val result = authDataSource.getCurrentUser()) {
+                    is ServiceResult.Success -> ServiceResult.Success(result.data)
+                    is ServiceResult.Error -> result
+                    else -> ServiceResult.Error(ErrorCode.UNKNOWN_ERROR)
+                }
+            }
+            is ServiceResult.Error -> reloadResult
             else -> ServiceResult.Error(ErrorCode.UNKNOWN_ERROR)
         }
     }
