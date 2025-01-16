@@ -1,7 +1,14 @@
 package com.workspace.app.main
 
 import android.util.Log
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.CircularProgressIndicator
@@ -82,18 +89,17 @@ fun MainScreen(
             )
         },
         bottomBar = {
-            // Crossfade = 자연스럽게 화면 전환 애니메이션을 줌 ( navigationBar 가 바로 사라짐 )
-            navigator.currentMenu?.contentDescription?.let {
-                Crossfade(targetState = navigator.currentMenu, label = it) { currentMenu ->
-                    if (currentMenu != null) {
-                        BottomNavigationBar(
-                            currentMenu = currentMenu,
-                            onMenuSelected = { navigator.navigate(it) },
-                            onShowLoginSnackBar = onShowLoginSnackBar,
-                            hasToken = hasToken
-                        )
-                    }
-                }
+            AnimatedVisibility(
+                visible = navigator.currentMenu != null,
+                enter = EnterTransition.None,
+                exit = ExitTransition.None
+            ) {
+                BottomNavigationBar(
+                    currentMenu = navigator.currentMenu,
+                    onMenuSelected = { navigator.navigate(it) },
+                    onShowLoginSnackBar = onShowLoginSnackBar,
+                    hasToken = hasToken
+                )
             }
         }
     )
