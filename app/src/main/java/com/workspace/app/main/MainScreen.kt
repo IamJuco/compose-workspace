@@ -2,13 +2,8 @@ package com.workspace.app.main
 
 import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.Crossfade
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.CircularProgressIndicator
@@ -44,8 +39,8 @@ fun MainScreen(
     val snackBarHostState = remember { SnackbarHostState() }
 
     val initialScreenState by viewModel.initialScreenState.collectAsStateWithLifecycle()
-    val hasToken by viewModel.loginState.collectAsStateWithLifecycle()
-    Log.d("0526Token", hasToken.toString())
+    val loggedIn by viewModel.loginState.collectAsStateWithLifecycle()
+    Log.d("0526Token", loggedIn.toString())
 
     val onShowLoginSnackBar: () -> Unit = {
         lifecycleScope.launch {
@@ -85,7 +80,7 @@ fun MainScreen(
                 padding = paddingValues,
                 onShowSnackBar = onShowSnackBar,
                 onShowLoginSnackBar = onShowLoginSnackBar,
-                hasToken = hasToken
+                loggedIn = loggedIn
             )
         },
         bottomBar = {
@@ -97,8 +92,6 @@ fun MainScreen(
                 BottomNavigationBar(
                     currentMenu = navigator.currentMenu,
                     onMenuSelected = { navigator.navigate(it) },
-                    onShowLoginSnackBar = onShowLoginSnackBar,
-                    hasToken = hasToken
                 )
             }
         }

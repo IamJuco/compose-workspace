@@ -18,7 +18,7 @@ fun MainNavHost(
     padding: PaddingValues,
     onShowSnackBar: (String) -> Unit,
     onShowLoginSnackBar: () -> Unit,
-    hasToken: Boolean
+    loggedIn: Boolean
 ) {
     NavHost(
         navController = navigator.navController,
@@ -27,8 +27,6 @@ fun MainNavHost(
         homeNavGraph(
             padding = padding,
             navigateToDetail = navigator::navigateToDetail,
-            onShowLoginSnackBar = onShowLoginSnackBar,
-            hasToken = hasToken
         )
 
         myPageNavGraph(
@@ -38,8 +36,6 @@ fun MainNavHost(
         detailNavGraph(
             popBackStack = navigator::popBackStack,
             padding = padding,
-            onShowLoginSnackBar = onShowLoginSnackBar,
-            hasToken = hasToken
         )
 
         loginNavGraph(

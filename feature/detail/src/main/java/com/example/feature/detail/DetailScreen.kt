@@ -44,8 +44,6 @@ fun DetailRoute(
     detailViewModel: DetailViewModel = hiltViewModel(),
     popBackStack: () -> Unit,
     padding: PaddingValues = PaddingValues(),
-    onShowLoginSnackBar: () -> Unit,
-    hasToken: Boolean
 ) {
     val state by detailViewModel.pokemonDetailState.collectAsStateWithLifecycle()
 

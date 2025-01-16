@@ -15,15 +15,11 @@ fun NavController.navigateHome(navOptions: NavOptions) {
 fun NavGraphBuilder.homeNavGraph(
     navigateToDetail: (Int) -> Unit,
     padding: PaddingValues,
-    onShowLoginSnackBar: () -> Unit,
-    hasToken: Boolean
 ) {
     composable<MainMenuRoute.Home> {
         HomeRoute(
             navigateToDetail = navigateToDetail,
             padding = padding,
-            onShowLoginSnackBar = onShowLoginSnackBar,
-            hasToken = hasToken
         )
     }
 }

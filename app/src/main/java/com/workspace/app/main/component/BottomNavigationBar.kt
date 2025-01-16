@@ -12,8 +12,6 @@ import com.workspace.app.main.navigation.MainMenu
 fun BottomNavigationBar(
     currentMenu: MainMenu?,
     onMenuSelected: (MainMenu) -> Unit,
-    onShowLoginSnackBar: () -> Unit,
-    hasToken: Boolean,
 ) {
     NavigationBar {
         MainMenu.entries.forEach { menu ->
