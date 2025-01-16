@@ -97,8 +97,4 @@ class AuthRepositoryImpl @Inject constructor(
             authManager.tempUserEmail.firstOrNull()
         }
     }
-
-    private suspend fun saveTokenToSharedPreferences(token: String) {
-        authManager.saveIdToken(token)
-    }
 }

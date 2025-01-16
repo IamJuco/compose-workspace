@@ -14,18 +14,18 @@ class AuthManager @Inject constructor(
     private val dataStore: DataStore<Preferences>
 ){
     companion object {
-        private val USER_ID_TOKEN = stringPreferencesKey("user_id_token")
+//        private val USER_ID_TOKEN = stringPreferencesKey("user_id_token")
         private val TEMP_USER_EMAIL = stringPreferencesKey("temp_user_email")
     }
 
-    suspend fun saveIdToken(idToken: String) {
-        dataStore.edit { preferences ->
-            preferences[USER_ID_TOKEN] = idToken
-        }
-    }
-
-    val idToken: Flow<String?> = dataStore.data
-        .map { preferences -> preferences[USER_ID_TOKEN] }
+//    suspend fun saveIdToken(idToken: String) {
+//        dataStore.edit { preferences ->
+//            preferences[USER_ID_TOKEN] = idToken
+//        }
+//    }
+//
+//    val idToken: Flow<String?> = dataStore.data
+//        .map { preferences -> preferences[USER_ID_TOKEN] }
 
     suspend fun saveTempUserEmail(email: String) {
         dataStore.edit { preferences ->

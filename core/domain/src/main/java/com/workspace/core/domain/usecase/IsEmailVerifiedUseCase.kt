@@ -8,7 +8,6 @@ class IsEmailVerifiedUseCase @Inject constructor(
     private val authRepository: AuthRepository
 ) {
     suspend operator fun invoke(): ServiceResult<Boolean> {
-//        authRepository.deleteAccount()
         return authRepository.isEmailVerified()
     }
 }
