@@ -1,13 +1,22 @@
 package com.workspace.core.data.mapper
 
-import com.google.firebase.auth.FirebaseUser
+import com.workspace.core.data.document.UserDocument
 import com.workspace.core.domain.model.User
 
-fun FirebaseUser.toDomainModel(): User {
-    return User(
-        id = uid,
+fun User.toDocument(): UserDocument {
+    return UserDocument(
+        id = id,
         email = email,
-        nickName = displayName,
-        profile = photoUrl?.toString(),
+        nickName = nickName,
+        profile = profile
+    )
+}
+
+fun UserDocument.toDomain(): User {
+    return User(
+        id = id,
+        email = email,
+        nickName = nickName,
+        profile = profile
     )
 }
