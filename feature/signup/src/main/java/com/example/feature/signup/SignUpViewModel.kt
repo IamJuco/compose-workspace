@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.workspace.core.domain.model.ServiceResult
 import com.workspace.core.domain.model.UiState
-import com.workspace.core.domain.model.User
 import com.workspace.core.domain.usecase.DeleteTempAccountUseCase
 import com.workspace.core.domain.usecase.IsEmailVerifiedUseCase
 import com.workspace.core.domain.usecase.SignUpAndSendVerificationCodeUseCase
@@ -29,8 +28,8 @@ class SignUpViewModel @Inject constructor(
     private val _isEmailVerifiedState = MutableStateFlow<UiState<Boolean>>(UiState.Idle)
     val isEmailVerifiedState: StateFlow<UiState<Boolean>> = _isEmailVerifiedState
 
-    private val _signUpState = MutableStateFlow<UiState<User>>(UiState.Idle)
-    val signUpState: StateFlow<UiState<User>> = _signUpState
+    private val _signUpState = MutableStateFlow<UiState<Boolean>>(UiState.Idle)
+    val signUpState: StateFlow<UiState<Boolean>> = _signUpState
 
     fun sendVerificationEmail(email: String) {
         viewModelScope.launch {

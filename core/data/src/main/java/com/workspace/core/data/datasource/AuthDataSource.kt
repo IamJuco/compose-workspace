@@ -4,15 +4,17 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.workspace.core.data.mapper.mapToErrorCode
+import com.workspace.core.domain.model.ErrorCode
 import com.workspace.core.domain.model.ServiceResult
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 interface AuthDataSource {
-    suspend fun loginWithEmail(email: String, password: String): ServiceResult<FirebaseUser>
-    suspend fun signUpWithEmail(email: String, password: String): ServiceResult<FirebaseUser>
+    suspend fun loginWithEmail(email: String, password: String): ServiceResult<Unit>
+    suspend fun signUpWithEmail(email: String, password: String): ServiceResult<Boolean>
     suspend fun loginWithGoogle(idToken: String): ServiceResult<FirebaseUser>
-    suspend fun getCurrentUser(): ServiceResult<Boolean>
+    suspend fun isCurrentUser(): ServiceResult<Boolean>
+    suspend fun getCurrentUserUid(): String?
     suspend fun signOut()
     suspend fun getIdToken(): ServiceResult<String?>
     suspend fun sendEmailVerificationCode(): ServiceResult<Unit>
@@ -27,11 +29,11 @@ class AuthDataSourceImpl @Inject constructor(
     override suspend fun loginWithEmail(
         email: String,
         password: String
-    ): ServiceResult<FirebaseUser> {
+    ): ServiceResult<Unit> {
         //TODO 나중에 user 가 null 일때 처리 할 것
         return try {
-            val result = firebaseAuth.signInWithEmailAndPassword(email, password).await()
-            ServiceResult.Success(result.user!!)
+            firebaseAuth.signInWithEmailAndPassword(email, password).await()
+            ServiceResult.Success(Unit)
         } catch (e: Exception) {
             mapToErrorCode(e)
         }
@@ -40,10 +42,14 @@ class AuthDataSourceImpl @Inject constructor(
     override suspend fun signUpWithEmail(
         email: String,
         password: String
-    ): ServiceResult<FirebaseUser> {
+    ): ServiceResult<Boolean> {
         return try {
             val result = firebaseAuth.createUserWithEmailAndPassword(email, password).await()
-            ServiceResult.Success(result.user!!)
+            if (result.user != null) {
+                ServiceResult.Success(true)
+            } else {
+                ServiceResult.Error(ErrorCode.UNKNOWN_ERROR, "회원가입 실패: 사용자 정보가 없습니다.")
+            }
         } catch (e: Exception) {
             mapToErrorCode(e)
         }
@@ -62,7 +68,7 @@ class AuthDataSourceImpl @Inject constructor(
     //TODO: 로그인이 되어있는 상태에서 계정을 삭제시키고 앱을 껏다켜도 다시 로그인이 되어있음
     // 따라서 reload를 추가시켰지만 앱이 튕김
     // dataSource에 reload용 하나만들고 예외처리 후 RepositoryImpl에서 reload 처리도 하자.
-    override suspend fun getCurrentUser(): ServiceResult<Boolean> {
+    override suspend fun isCurrentUser(): ServiceResult<Boolean> {
 //        firebaseAuth.currentUser?.reload()?.await()
         val user = firebaseAuth.currentUser != null
         return try {
@@ -70,6 +76,10 @@ class AuthDataSourceImpl @Inject constructor(
         } catch (e: Exception) {
             mapToErrorCode(e)
         }
+    }
+
+    override suspend fun getCurrentUserUid(): String? {
+        return firebaseAuth.currentUser?.uid
     }
 
     override suspend fun reloadCurrentUser(): ServiceResult<Unit> {
