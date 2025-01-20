@@ -55,6 +55,14 @@ class AuthRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun tempSignUpWithEmail(email: String, password: String): ServiceResult<Unit> {
+        return when (val result = authDataSource.signUpWithEmail(email, password)) {
+            is ServiceResult.Success -> ServiceResult.Success(Unit)
+            is ServiceResult.Error -> result
+            else -> ServiceResult.Error(ErrorCode.UNKNOWN_ERROR)
+        }
+    }
+
     override suspend fun checkUserLoggedIn(): ServiceResult<Boolean> {
         return when (val reloadResult = authDataSource.reloadCurrentUser()) {
             is ServiceResult.Success -> {

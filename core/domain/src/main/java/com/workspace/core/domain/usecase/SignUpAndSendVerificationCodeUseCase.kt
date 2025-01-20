@@ -11,7 +11,7 @@ class SignUpAndSendVerificationCodeUseCase @Inject constructor(
     suspend operator fun invoke(email: String): ServiceResult<Unit> {
         val temporaryPassword = TempPassword.tempRandomPassword()
 
-        val signUpResult = authRepository.signUpWithEmail(email, temporaryPassword)
+        val signUpResult = authRepository.tempSignUpWithEmail(email, temporaryPassword)
         if (signUpResult is ServiceResult.Error) {
             return signUpResult
         }
