@@ -29,8 +29,6 @@ class AuthRepositoryImpl @Inject constructor(
         }
     }
 
-    //TODO:: 지금 임시 회원가입 때문에 User uid가 두개 저장됨
-    // Usecase에서 saveUserInfo 처리하자, userRepositoryImpl 이용해서
     override suspend fun signUpWithEmail(email: String, password: String): ServiceResult<Boolean> {
         return when (val result = authDataSource.signUpWithEmail(email, password)) {
             is ServiceResult.Success -> {
