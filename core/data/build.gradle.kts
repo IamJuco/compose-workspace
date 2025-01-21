@@ -56,7 +56,6 @@ android {
 }
 
 dependencies {
-
     implementation(project(":core:domain"))
 
     // Hilt
@@ -74,13 +73,14 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:33.7.0"))
     implementation("com.google.firebase:firebase-auth-ktx")
     implementation ("com.google.firebase:firebase-firestore-ktx")
+    implementation ("com.google.firebase:firebase-storage")
 
     // DataStore
     implementation(libs.datastore)
 
     // Security-Crypto
-    implementation(libs.androidx.security.crypto)
-    implementation(libs.androidx.security.crypto.ktx)
+//    implementation(libs.androidx.security.crypto)
+//    implementation(libs.androidx.security.crypto.ktx)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
