@@ -10,7 +10,7 @@ import com.example.feature.signup.navigation.emailVerificationNavGraph
 import com.example.feature.signup.navigation.passwordCheckNavGraph
 import com.workspace.app.main.navigation.MainNavigator
 import com.workspace.feature.home.navigation.homeNavGraph
-import com.workspace.feature.mypage.myPageNavGraph
+import com.workspace.feature.mypage.navigation.myPageNavGraph
 
 @Composable
 fun MainNavHost(

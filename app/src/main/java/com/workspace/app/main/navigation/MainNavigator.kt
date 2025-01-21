@@ -16,7 +16,7 @@ import com.example.feature.signup.navigation.navigateToEmailVerification
 import com.example.feature.signup.navigation.navigateToPasswordCheck
 import com.workspace.core.domain.navigation.RouteModel
 import com.workspace.feature.home.navigation.navigateHome
-import com.workspace.feature.mypage.navigateMyPage
+import com.workspace.feature.mypage.navigation.navigateMyPage
 
 class MainNavigator(
     val navController: NavHostController

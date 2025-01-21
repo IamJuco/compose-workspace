@@ -37,7 +37,7 @@ class AuthRepositoryImpl @Inject constructor(
                     val user = User(
                         id = currentUser,
                         email = email,
-                        nickName = "과일마스터",
+                        nickName = "닉네임을 설정해 보세요!",
                         profile = null
                     )
                     when (firestoreSource.saveUserInfo(user.toDocument())) {
