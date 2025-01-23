@@ -2,9 +2,12 @@ package com.workspace.core.data.di
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
 import com.workspace.core.data.api.PokeService
 import com.workspace.core.data.datasource.AuthDataSource
 import com.workspace.core.data.datasource.AuthDataSourceImpl
+import com.workspace.core.data.datasource.FirebaseStorageSource
+import com.workspace.core.data.datasource.FirebaseStorageSourceImpl
 import com.workspace.core.data.datasource.FirestoreSource
 import com.workspace.core.data.datasource.FirestoreSourceImpl
 import com.workspace.core.data.datasource.PokemonDataSource
@@ -35,5 +38,11 @@ object DataSourceModule {
     @Singleton
     fun provideFirestoreSource(firestore: FirebaseFirestore): FirestoreSource {
         return FirestoreSourceImpl(firestore)
+    }
+
+    @Provides
+    @Singleton
+    fun provideFirebaseStorageSource(storage: FirebaseStorage): FirebaseStorageSource {
+        return FirebaseStorageSourceImpl(storage)
     }
 }
