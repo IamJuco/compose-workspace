@@ -5,5 +5,6 @@ import com.workspace.core.domain.model.User
 
 interface UserRepository {
     suspend fun saveUserInfo(user: User): ServiceResult<Unit>
-    suspend fun getUserInfo(userId: String): ServiceResult<User>
+    suspend fun getUserInfo(): ServiceResult<User>
+    suspend fun updateUserProfile(profileImage: String): ServiceResult<String>
 }

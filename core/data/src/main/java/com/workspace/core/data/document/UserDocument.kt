@@ -5,5 +5,4 @@ data class UserDocument(
     val email: String? = null,
     val nickName: String? = null,
     val profile: String? = null,
-    val joinDate: Long = System.currentTimeMillis()
 )
