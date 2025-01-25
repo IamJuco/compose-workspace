@@ -33,11 +33,9 @@ class UserRepositoryImpl @Inject constructor(
 
         return when (val result = firestoreSource.getUserInfo(currentUserUid)) {
             is ServiceResult.Success -> {
-                Log.d("0526getUserSuccess", result.data.toString()) // 디버깅 로그 추가
                 ServiceResult.Success(result.data.toDomain())
             }
             is ServiceResult.Error -> {
-                Log.d("0526getUserError", result.errorMessage.toString()) // 디버깅 로그 추가
                 result
             }
         }
@@ -46,23 +44,23 @@ class UserRepositoryImpl @Inject constructor(
     override suspend fun updateUserProfile(profileImage: String): ServiceResult<String> {
         val currentUserUid = authDataSource.getCurrentUserUid()
             ?: return ServiceResult.Error(ErrorCode.HTTP_CLIENT_UNAUTHORIZED, "로그인된 사용자가 없습니다.")
+
         val uploadResult = fireStorage.uploadImage(currentUserUid, Uri.parse(profileImage))
-        Log.d("0526imageResult", uploadResult.toString())
-        return when (uploadResult) {
-            is ServiceResult.Success -> {
-                val imageUrl = uploadResult.data
+        if (uploadResult is ServiceResult.Error) {
+            return uploadResult
+        }
 
-                val userDocument = UserDocument(
-                    id = currentUserUid,
-                    profile = imageUrl
-                )
+        val userInfoResult = firestoreSource.getUserInfo(currentUserUid)
+        if (userInfoResult is ServiceResult.Error) {
+            return userInfoResult
+        }
+        val userResult = (userInfoResult as ServiceResult.Success).data
+        val imageUrl = (uploadResult as ServiceResult.Success).data
+        val updatedUserDocument = userResult.copy(profile = imageUrl)
 
-                when (val saveResult = firestoreSource.saveUserInfo(userDocument)) {
-                    is ServiceResult.Success -> ServiceResult.Success(imageUrl)
-                    is ServiceResult.Error -> saveResult
-                }
-            }
-            is ServiceResult.Error -> uploadResult
+        return when (val saveResult = firestoreSource.saveUserInfo(updatedUserDocument)) {
+            is ServiceResult.Success -> ServiceResult.Success(imageUrl)
+            is ServiceResult.Error -> saveResult
         }
     }
 }
