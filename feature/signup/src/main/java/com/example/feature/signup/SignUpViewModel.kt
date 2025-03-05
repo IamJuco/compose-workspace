@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.workspace.core.domain.model.ServiceResult
 import com.workspace.core.domain.model.UiState
-import com.workspace.core.domain.usecase.DeleteTempAccountUseCase
+import com.workspace.core.domain.usecase.DeleteAccountUseCase
 import com.workspace.core.domain.usecase.IsEmailVerifiedUseCase
 import com.workspace.core.domain.usecase.SignUpAndSendVerificationCodeUseCase
 import com.workspace.core.domain.usecase.SignUpWithEmailUseCase
@@ -18,7 +18,7 @@ import javax.inject.Inject
 @HiltViewModel
 class SignUpViewModel @Inject constructor(
     private val signUpAndSendVerificationCodeUseCase: SignUpAndSendVerificationCodeUseCase,
-    private val deleteTempAccountUseCase: DeleteTempAccountUseCase,
+    private val deleteAccountUseCase: DeleteAccountUseCase,
     private val isEmailVerifiedUseCase: IsEmailVerifiedUseCase,
     private val signUpWithEmailUseCase: SignUpWithEmailUseCase
 ) : ViewModel() {
@@ -78,7 +78,7 @@ class SignUpViewModel @Inject constructor(
 
     fun deleteTempAccount() {
         viewModelScope.launch {
-            deleteTempAccountUseCase()
+            deleteAccountUseCase()
         }
     }
 

@@ -8,7 +8,7 @@ interface AuthRepository {
     suspend fun signUpWithEmail(email: String, password: String): ServiceResult<Boolean>
     suspend fun tempSignUpWithEmail(email: String, password: String): ServiceResult<Unit>
     suspend fun checkUserLoggedIn(): ServiceResult<Boolean>
-    suspend fun signOut()
+    suspend fun signOut(): ServiceResult<Unit>
     suspend fun sendEmailVerificationCode(): ServiceResult<Unit>
     suspend fun deleteAccount(): ServiceResult<Unit>
     suspend fun isEmailVerified(): ServiceResult<Boolean>

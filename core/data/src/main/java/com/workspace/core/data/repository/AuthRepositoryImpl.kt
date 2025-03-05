@@ -75,9 +75,12 @@ class AuthRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun signOut() {
-        authDataSource.signOut()
-        authManager.clearData()
+    override suspend fun signOut(): ServiceResult<Unit> {
+        return when(val result = authDataSource.signOut()) {
+            is ServiceResult.Success -> ServiceResult.Success(Unit)
+            is ServiceResult.Error -> result
+            else -> ServiceResult.Error(ErrorCode.UNKNOWN_ERROR)
+        }
     }
 
     override suspend fun sendEmailVerificationCode(): ServiceResult<Unit> {

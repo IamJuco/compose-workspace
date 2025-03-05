@@ -1,6 +1,5 @@
 package com.workspace.feature.mypage
 
-import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.border
@@ -23,13 +22,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavHostController
 import coil3.compose.AsyncImage
 import com.workspace.core.domain.model.UiState
 
@@ -64,7 +60,8 @@ fun MyPageRoute(
     MyPageScreen(
         padding = padding,
         profileImageUrl = profileImageUrl,
-        onImageClick = { launcher.launch("image/*") }
+        onImageClick = { launcher.launch("image/*") },
+        onLogoutClick = { myPageViewModel.logout() }
     )
 }
 
@@ -74,6 +71,7 @@ fun MyPageScreen(
     padding: PaddingValues = PaddingValues(),
     profileImageUrl: String?,
     onImageClick: () -> Unit,
+    onLogoutClick:() -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -105,6 +103,15 @@ fun MyPageScreen(
                 .border(width = 1.dp, Color.Gray, shape = RoundedCornerShape(8.dp))
                 .padding(start = 24.dp, end = 24.dp, top = 8.dp, bottom = 8.dp),
             text = "프로필 수정"
+        )
+        Spacer(modifier = Modifier.padding(top = 16.dp))
+        Text(
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+                .border(width = 1.dp, Color.Gray, shape = RoundedCornerShape(8.dp))
+                .padding(start = 24.dp, end = 24.dp, top = 8.dp, bottom = 8.dp)
+                .clickable { onLogoutClick() },
+            text = "로그아웃"
         )
     }
 }

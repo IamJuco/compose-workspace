@@ -15,7 +15,7 @@ interface AuthDataSource {
     suspend fun loginWithGoogle(idToken: String): ServiceResult<FirebaseUser>
     suspend fun isCurrentUser(): ServiceResult<Boolean>
     suspend fun getCurrentUserUid(): String?
-    suspend fun signOut()
+    suspend fun signOut(): ServiceResult<Unit>
     suspend fun getIdToken(): ServiceResult<String?>
     suspend fun sendEmailVerificationCode(): ServiceResult<Unit>
     suspend fun deleteAccount(): ServiceResult<Unit>
@@ -128,7 +128,12 @@ class AuthDataSourceImpl @Inject constructor(
         }
     }
 
-    override suspend fun signOut() {
-        firebaseAuth.signOut()
+    override suspend fun signOut(): ServiceResult<Unit> {
+        return try {
+            firebaseAuth.signOut()
+            ServiceResult.Success(Unit)
+        } catch (e: Exception) {
+            mapToErrorCode(e)
+        }
     }
 }
