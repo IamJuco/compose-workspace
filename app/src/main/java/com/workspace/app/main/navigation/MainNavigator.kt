@@ -56,7 +56,7 @@ class MainNavigator(
     }
 
     fun navigateToDetail(pokemonId: Int) = navController.navigateToDetail(pokemonId = pokemonId, navOptions  = singleTopOptions)
-    fun navigateLogin() = navController.navigateLogin(navOptions  = allBackStackInclusiveTrue)
+    fun navigateToLogin() = navController.navigateLogin(navOptions  = allBackStackInclusiveTrue)
     fun navigateToHome() = navController.navigateHome(navOptions = allBackStackInclusiveTrue)
     fun navigateToEmailCheck() = navController.navigateToEmailCheck(navOptions = singleTopOptions)
     fun navigateToEmailVerification() = navController.navigateToEmailVerification(navOptions = singleTopOptions)

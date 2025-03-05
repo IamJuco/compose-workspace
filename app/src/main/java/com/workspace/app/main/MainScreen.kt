@@ -50,7 +50,7 @@ fun MainScreen(
                 duration = SnackbarDuration.Short
             ).let { result ->
                 if (result == SnackbarResult.ActionPerformed) {
-                    navigator.navigateLogin()
+                    navigator.navigateToLogin()
                 }
             }
         }
@@ -64,11 +64,11 @@ fun MainScreen(
         if (initialScreenState is MainViewModel.ScreenState.Loading) {
             delay(5_000)
             onShowSnackBar(ErrorCode.NETWORK_TIMEOUT.message)
-            navigator.navigateLogin()
+            navigator.navigateToLogin()
         }
         when {
             initialScreenState is MainViewModel.ScreenState.Home -> navigator.navigateToHome()
-            initialScreenState is MainViewModel.ScreenState.Login -> navigator.navigateLogin()
+            initialScreenState is MainViewModel.ScreenState.Login -> navigator.navigateToLogin()
         }
     }
 

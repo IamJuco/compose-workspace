@@ -13,11 +13,13 @@ fun NavController.navigateMyPage(navOptions: NavOptions) {
 }
 
 fun NavGraphBuilder.myPageNavGraph(
-    padding: PaddingValues
+    padding: PaddingValues,
+    navigateToLogin: () -> Unit
 ) {
     composable<MainMenuRoute.MyPage> {
         MyPageRoute(
-            padding = padding
+            padding = padding,
+            navigateToLogin = navigateToLogin
         )
     }
 }

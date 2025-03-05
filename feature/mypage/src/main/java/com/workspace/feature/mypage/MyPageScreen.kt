@@ -32,9 +32,11 @@ import com.workspace.core.domain.model.UiState
 @Composable
 fun MyPageRoute(
     padding: PaddingValues = PaddingValues(),
+    navigateToLogin: () -> Unit,
     myPageViewModel: MyPageViewModel = hiltViewModel(),
 ) {
     val uiState by myPageViewModel.uiState.collectAsStateWithLifecycle()
+    val logoutState by myPageViewModel.logoutState.collectAsStateWithLifecycle()
 
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent(),
@@ -51,6 +53,12 @@ fun MyPageRoute(
         }
     }
 
+    LaunchedEffect(logoutState) {
+        if (logoutState) {
+            navigateToLogin()
+        }
+    }
+
     if (uiState is UiState.Loading) {
         LoadingScreen()
     }
@@ -64,7 +72,6 @@ fun MyPageRoute(
         onLogoutClick = { myPageViewModel.logout() }
     )
 }
-
 
 @Composable
 fun MyPageScreen(

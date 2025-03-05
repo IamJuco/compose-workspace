@@ -25,6 +25,9 @@ class MyPageViewModel @Inject constructor(
     private val _uiState = MutableStateFlow<UiState<String?>>(UiState.Idle)
     val uiState: StateFlow<UiState<String?>> = _uiState
 
+    private val _logoutState = MutableStateFlow(false)
+    val logoutState: StateFlow<Boolean> = _logoutState
+
     fun loadUserProfile() {
         viewModelScope.launch {
             _uiState.value = UiState.Loading
@@ -59,12 +62,9 @@ class MyPageViewModel @Inject constructor(
         viewModelScope.launch {
             _uiState.value = UiState.Loading
             when (val result = signOutWithEmailUseCase()) {
-                is ServiceResult.Success -> _uiState.update { UiState.Success(null) }
+                is ServiceResult.Success -> _logoutState.update { true }
                 is ServiceResult.Error -> _uiState.update {
-                    UiState.Error(
-                        result.errorCode,
-                        result.errorMessage
-                    )
+                    UiState.Error(result.errorCode, result.errorMessage)
                 }
             }
         }

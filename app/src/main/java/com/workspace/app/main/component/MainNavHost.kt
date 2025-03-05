@@ -30,7 +30,8 @@ fun MainNavHost(
         )
 
         myPageNavGraph(
-            padding = padding
+            padding = padding,
+            navigateToLogin = navigator::navigateToLogin
         )
 
         detailNavGraph(
@@ -61,7 +62,7 @@ fun MainNavHost(
 
         passwordCheckNavGraph(
             padding = padding,
-            navigateToLogin = navigator::navigateLogin,
+            navigateToLogin = navigator::navigateToLogin,
             onShowSnackBar = onShowSnackBar,
         )
     }
