@@ -8,7 +8,7 @@ plugins {
     alias(libs.plugins.hilt)
     alias(libs.plugins.ksp)
     // Firebase
-    alias(libs.plugins.firebase)
+//    alias(libs.plugins.firebase)
 }
 
 // local.properties의 값 읽는 로직
